@@ -15,11 +15,13 @@ header{
 }
 
 header h1,
-header h2{
+header h3{
   color: rgb(var(--H-font-monochrome));
   text-align: center;
 }
 
 nav{
   background-color: rgb(var(--nav-monochrome));
+  width: 100%;
+  height: 10%;
 }
