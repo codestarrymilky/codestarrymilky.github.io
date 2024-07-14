@@ -14,10 +14,14 @@ header{
   background-color: rgb(var(--header-monochrome));
 }
 
-header h1,
-header h3{
+header #header-inner h1,
+header #header-inner h3{
   color: rgb(var(--H-font-monochrome));
   text-align: center;
+}
+
+header #header-inner{
+  margin: auto;
 }
 
 nav{
