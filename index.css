@@ -1,5 +1,21 @@
+:root{
+  --header-monochrome: 13,110,153;
+  --nav-monochrome: 33,37,41;
+  --H-font-monochrome: 255,255,255;
+}
+
 header{
   width: 100%;
-  height: 35%;
-  background-color: black;
+  height: 20%;
+  background-color: rgb(var(--header-monochrome));
+}
+
+header h1,
+header h2{
+  color: rgb(var(--H-font-monochrome));
+  text-align: center;
+}
+
+nav{
+  background-color: rgb(var(--nav-monochrome));
 }
