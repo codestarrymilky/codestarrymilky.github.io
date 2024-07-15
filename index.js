@@ -14,10 +14,5 @@ dropbar.addEventListener('mouseout', function () {
 // mobile
 dropbar.addEventListener('touchstart', function (e) {
       e.preventDefault();
-      dropdown.style.display = 'block';
-});
-
-dropbar.addEventListener('touchend', function (e) {
-      e.preventDefault();
-      dropdown.style.display = 'none';
-});
+      dropdown.style.display = dropdown.style.display === 'none'? 'block' : 'none';
+    });
