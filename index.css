@@ -33,6 +33,9 @@ nav{
   background-color: rgb(var(--nav-monochrome));
   width: 100%;
   height: 5%;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 }
 
 nav>ul>li,
