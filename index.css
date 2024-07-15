@@ -34,7 +34,7 @@ nav {
   padding: 10px;
 }
 
-nav ul {
+nav ul>ul {
   display: none;
   list-style-type: none;
   padding: 0;
