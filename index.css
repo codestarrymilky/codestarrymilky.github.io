@@ -34,9 +34,8 @@ nav {
   padding: 10px;
 }
 
-ul.dropdown {
+ul.dropdown-content {
   display: none;
-  list-style-type: none;
 }
 
 
@@ -44,6 +43,7 @@ ul.dropdown {
 .dropdown {
   position: relative;
   display: inline-block;
+ list-style-type: none;
 }
 
 .dropdown-content {
@@ -54,6 +54,7 @@ ul.dropdown {
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   padding: 12px 16px;
   z-index: 1;
+ list-style-type: none;
 }
 
 .dropdown:hover .dropdown-content {
