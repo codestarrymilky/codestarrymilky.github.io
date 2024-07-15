@@ -23,6 +23,7 @@ header{
 header #header-inner h1,
 header #header-inner h3{
   color: rgb(var(--H-font-monochrome));
+  display: block;
 }
 
 header #header-inner{
