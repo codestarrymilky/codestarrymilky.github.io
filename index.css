@@ -26,9 +26,7 @@ header #header-inner h3{
   display: block;
 }
 
-header #header-inner{
-  margin: auto;
-}
+
 
 nav{
   background-color: rgb(var(--nav-monochrome));
