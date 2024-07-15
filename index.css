@@ -34,25 +34,28 @@ nav {
   padding: 10px;
 }
 
-ul#dropdown {
+ul.dropdown {
   display: none;
   list-style-type: none;
-  padding: 0;
-  margin: 0;  
-  background-color: #444;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
 
 
-#dropdown li {
-   cursor: pointer;
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-#dropdown ul li {
-   padding: 10px;
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
 }
 
-#dropdown ul li:hover {
-   background-color: #555;
+.dropdown:hover .dropdown-content {
+  display: block;
 }
