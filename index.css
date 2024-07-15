@@ -36,13 +36,13 @@ nav {
 
 
 
-.dropdown {
+#dropdown {
   position: relative;
   display: inline-block;
- list-style-type: none;
+  list-style-type: none;
 }
 
-.dropdown-content {
+#dropdown-content {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -53,6 +53,6 @@ nav {
  list-style-type: none;
 }
 
-.dropdown:hover .dropdown-content {
+#dropdown:hover>#dropdown-content {
   display: block;
 }
