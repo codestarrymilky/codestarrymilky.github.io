@@ -12,12 +12,14 @@ header{
   width: 100%;
   height: 20%;
   background-color: rgb(var(--header-monochrome));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header #header-inner h1,
 header #header-inner h3{
   color: rgb(var(--H-font-monochrome));
-  text-align: center;
 }
 
 header #header-inner{
