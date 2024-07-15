@@ -36,6 +36,7 @@ nav{
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
+  margin-top: 0;
 }
 
 nav>ul>li,
@@ -44,6 +45,10 @@ nav>ul>li>ul>li{
   list-style-type: none;
 }
 
-nav>ul>li:not(>p.list){
+nav>ul>li>ul{
   display: none;
+}
+
+nav>ul>li>ul.show{
+  display: block;
 }
