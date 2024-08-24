@@ -1,4 +1,98 @@
+/* Base Styles */
+body, h1, h2, h3, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-                    @import url(https://d3g0gp89917ko0.cloudfront.net/v--4b961b7cc327/common--theme/base/css/style.css);
-                    @import url(https://github.backroomswiki.cn/Old_BHL/css/liminal-impact.css);
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
 
+/* ============== */
+#container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+}
+
+header h1 {
+    display: inline-block;
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    float: right;
+}
+
+nav ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.home {
+    background: #f4f4f4;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.home h2 {
+    margin-bottom: 1rem;
+}
+
+.home .btn.product {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.products {
+    padding: 2rem 0;
+}
+
+.product-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    flex: 1;
+    padding: 1rem;
+    background: #f4f4f4;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.contact {
+    background: #f4f4f4;
+    padding: 2rem 0;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+}
