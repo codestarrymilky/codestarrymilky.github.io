@@ -44,7 +44,7 @@ nav ul {
 nav ul li {
     display: inline;
     margin-left: 20px;
-    background-color: rgb(--header-color);
+    background-color: rgb(var(--header-color));
     border-radius: 5px;
 }
 
