@@ -1,109 +1,34 @@
-/* ROOT */
 :root{
-    --header-color: 51,51,51;
-    --monochrome-color: 244,244,244;
-    --font-color: 255,255,255;
-    --product-bg: 221,221,221;
+    --bg: 245,245,245,0.8;
+    --border: 173,216,230;
 }
 
+.folder{
+    background: rgba(var(--bg));
+    border-top: 2px solid rgb(var(--border));
+    border-bottom: 2px solid rgb(var(--border));
 
-/* Base Styles */
-body, h1, h2, h3, p, ul, li, a {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    & p::before{
+        content: "\d83d\dcc1";
+        filter: hue-rotate(180deg) brightness(1.2) saturate(0.8);
+        color: black;
+    }
 }
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
+.folder:nth-of-type(1){
+    border-bottom: none;
 }
 
-/* ============== */
-#container {
-    width: 80%;
-    margin: 0 auto;
+.folder:nth-last-of-type(1){
+    border-top: none;
 }
 
-header {
-    background: rgb(var(--header-color));
-    color: rgb(var(--font-color));
-    padding: 1rem 0;
-}
+.files{
+    background: rgba(var(--bg));
+    border-top: 2px solid rgb(var(--border));
+    border-bottom: 2px solid rgb(var(--border));
 
-header h1 {
-    display: inline-block;
-    margin: 0;
-}
-
-nav ul {
-    list-style: none;
-    float: right;
-}
-
-nav ul li {
-    display: inline;
-    margin-left: 20px;
-    background-color: rgb(var(--header-color));
-    border-radius: 5px;
-}
-
-nav ul li a {
-    color: rgb(var(--font-color));
-    text-decoration: none;
-}
-
-.home {
-    background: rgb(var(--monochrome-color));
-    padding: 2rem 0;
-    text-align: center;
-}
-
-.home h2 {
-    margin-bottom: 1rem;
-}
-
-.home .btn.product {
-    display: inline-block;
-    padding: 10px 20px;
-    background: rgb(var(--header-color));
-    color: rgb(var(--font-color));
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.products {
-    padding: 2rem 0;
-}
-
-.product-grid {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.product-item {
-    flex: 1;
-    padding: 1rem;
-    background: rgb(var(--monochrome-color));
-    text-align: center;
-    border: 1px solid rgb(var(--product-bg));
-    border-radius: 5px;
-}
-
-.product-item img {
-    max-width: 100%;
-    height: auto;
-}
-
-.contact {
-    background: rgb(var(--monochrome-color));
-    padding: 2rem 0;
-}
-
-footer {
-    background: rgb(var(--header-color));
-    color: #fff;
-    text-align: center;
-    padding: 1rem 0;
+    & a::before{
+        content: "\d83d\dcc4";
+    }
 }
