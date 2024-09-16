@@ -14,7 +14,7 @@
 }
 
 .folder p::before{
-        content: "\d83d\dcc1";
+        content: "\ud83d\udcc1";
         filter: hue-rotate(180deg) brightness(1.2) saturate(0.8);
         color: black;
 }
@@ -40,5 +40,5 @@
 }
 
 .files a::before{
-        content: "\d83d\dcc4";
+        content: "\ud83d\udcc4";
 }
