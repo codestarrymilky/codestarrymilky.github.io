@@ -1,0 +1,20 @@
+<!DOCTYPE html>  
+<html lang="cn">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="stylesheet" href="./css.css">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-okaidia.min.css">  
+</head>  
+<body>  
+    <div class="container">  
+        <textarea id="codeEditor" class="code-editor" data-language="html" placeholder="在这里编写你的HTML/CSS/JavaScript代码..."></textarea>  
+        <button onclick="previewCode()">预览</button>  
+        <div id="highlightedCode" style="display: none;"></div>  
+        <iframe id="previewFrame" sandbox="allow-scripts"></iframe>  
+    </div>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>  
+    <script src="./script.js"></script>  
+</body>  
+</html>
