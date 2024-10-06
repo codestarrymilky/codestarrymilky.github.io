@@ -5,12 +5,11 @@
       var previewButton = document.getElementById("preview-button");
       var codePreview = document.getElementById("code-preview");
 
-      // 默认加载第一个模板
-      templateSelect.value = "template1";
+
 
       function generateTemplate() {
         var selectedTemplate = templateSelect.value;
-
+        selectedTemplate = "template1";
         if (selectedTemplate === "template1") {
           codeInput.value = "<p>模板1内容</p>";
         } else if (selectedTemplate === "template2") {
