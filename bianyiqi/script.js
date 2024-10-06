@@ -8,6 +8,8 @@ document.getElementById("preview-button").addEventListener("click", function() {
 
 var templateSelect = document.getElementById("templateSelect");
 
+
+templateSelect.value = "template1";
 function generateTemplate() {
   var selectedTemplate = templateSelect.value;
   
@@ -24,3 +26,5 @@ function generateTemplate() {
 }
 
 generateTemplate()
+
+templateSelect.addEventListener("change", generateTemplate);
