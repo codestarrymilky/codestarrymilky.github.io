@@ -10,7 +10,20 @@
       function generateTemplate() {
         var selectedTemplate = templateSelect.value;
         if (selectedTemplate === "template1") {
-          codeInput.value = "<p>模板1内容</p>";
+          codeInput.value = "
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                       <title>1</title>
+                       <style>
+
+                       </style>
+                     </head>
+                     <body>
+                
+                     </body>
+               </html>
+          ";
         } else if (selectedTemplate === "template2") {
           codeInput.value = "<p>模板2内容</p>";
         } else if (selectedTemplate === "template3") {
