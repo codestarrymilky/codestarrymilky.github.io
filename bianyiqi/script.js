@@ -9,7 +9,6 @@
 
       function generateTemplate() {
         var selectedTemplate = templateSelect.value;
-        selectedTemplate = "template1";
         if (selectedTemplate === "template1") {
           codeInput.value = "<p>模板1内容</p>";
         } else if (selectedTemplate === "template2") {
