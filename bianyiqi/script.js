@@ -11,7 +11,7 @@
         var selectedTemplate = templateSelect.value;
         if (selectedTemplate === "template1") {
           codeInput.value = "<!DOCTYPE html>/n<html>/n<head>/n<title>1</title>/n<style>/n/n</style>/n</head>/n<body>/n/n</body>/n</html>";
-        }
+        
         } else if (selectedTemplate === "template2") {
           codeInput.value = "<p>模板2内容</p>";
         } else if (selectedTemplate === "template3") {
