@@ -23,7 +23,7 @@ function generateTemplate() {
     templateContent = "<p>模板3内容</p>";
   }
   var code = document.getElementById("code-input").value;
-  code.value = templateContent;
+  code = templateContent;
 }
 
 generateTemplate()
