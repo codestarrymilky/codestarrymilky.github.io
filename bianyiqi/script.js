@@ -1,31 +1,32 @@
 // 先凑活用着，w3那个太难用了
 
-document.getElementById("preview-button").addEventListener("click", function() {
-  var code = document.getElementById("code-input").value;
-  var preview = document.getElementById("code-preview");
-  preview.innerHTML = code;
-});
+      var templateSelect = document.getElementById("templateSelect");
+      var codeInput = document.getElementById("code-input");
+      var previewButton = document.getElementById("preview-button");
+      var codePreview = document.getElementById("code-preview");
 
-var templateSelect = document.getElementById("templateSelect");
+      // 默认加载第一个模板
+      templateSelect.value = "template1";
 
+      function generateTemplate() {
+        var selectedTemplate = templateSelect.value;
 
+        if (selectedTemplate === "template1") {
+          codeInput.value = "<p>模板1内容</p>";
+        } else if (selectedTemplate === "template2") {
+          codeInput.value = "<p>模板2内容</p>";
+        } else if (selectedTemplate === "template3") {
+          codeInput.value = "<p>模板3内容</p>";
+        }
 
-function generateTemplate() {
-  var selectedTemplate = templateSelect.value;
-  templateSelect.value = "template1";
-  
-  var templateContent = "";
-  if (selectedTemplate === "template1") {
-    templateContent = "<h1>模板1内容</h1>";
-  } else if (selectedTemplate === "template2") {
-    templateContent = "<h2>模板2内容</h2>";
-  } else if (selectedTemplate === "template3") {
-    templateContent = "<p>模板3内容</p>";
-  }
-  var code = document.getElementById("code-input").value;
-  code = templateContent;
-}
+        previewCode();
+      }
 
-generateTemplate()
+      function previewCode() {
+        var code = codeInput.value;
+        codePreview.innerHTML = code;
+      }
 
-templateSelect.addEventListener("change", generateTemplate);
+      templateSelect.addEventListener("change", generateTemplate);
+      previewButton.addEventListener("click", previewCode);
+
