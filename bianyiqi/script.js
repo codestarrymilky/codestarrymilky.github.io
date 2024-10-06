@@ -26,6 +26,8 @@
         codePreview.innerHTML = code;
       }
 
+      generateTemplate()
+
       templateSelect.addEventListener("change", generateTemplate);
       previewButton.addEventListener("click", previewCode);
 
