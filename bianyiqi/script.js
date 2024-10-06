@@ -9,9 +9,10 @@ document.getElementById("preview-button").addEventListener("click", function() {
 var templateSelect = document.getElementById("templateSelect");
 
 
-templateSelect.value = "template1";
+
 function generateTemplate() {
   var selectedTemplate = templateSelect.value;
+  templateSelect.value = "template1";
   
   var templateContent = "";
   if (selectedTemplate === "template1") {
@@ -21,7 +22,7 @@ function generateTemplate() {
   } else if (selectedTemplate === "template3") {
     templateContent = "<p>模板3内容</p>";
   }
-  
+  var code = document.getElementById("code-input").value;
   code.value = templateContent;
 }
 
