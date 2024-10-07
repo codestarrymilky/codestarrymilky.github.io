@@ -29,6 +29,9 @@ function highlightCodeInTextarea() {
       const highlightedCode = hljs.highlightAuto(textareaValue).value;
       codeInput.value = highlightedCode;
 }
+
+highlightCodeInTextarea()
+
 generateTemplate()
 
 templateSelect.addEventListener("change", generateTemplate);
