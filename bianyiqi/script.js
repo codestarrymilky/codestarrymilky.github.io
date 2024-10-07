@@ -23,13 +23,7 @@ function previewCode() {
       hljs.highlightAll();
 }
 
-function highlightCodeInTextarea() {
-      var textareaValue = codeInput.value;
-      var highlightedCode = hljs.highlightAuto(textareaValue).value;
-      codeInput.value = highlightedCode;
-}
 
-highlightCodeInTextarea()
 
 generateTemplate()
 
