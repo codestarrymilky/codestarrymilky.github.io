@@ -20,6 +20,7 @@ function generateTemplate() {
 function previewCode() {
       var code = codeInput.value;
       codePreview.innerHTML = code;
+      Prism.highlightAll();
 }
 
 generateTemplate()
