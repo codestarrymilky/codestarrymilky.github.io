@@ -20,7 +20,8 @@ function generateTemplate() {
 function previewCode() {
       var code = codeInput.value;
       codePreview.innerHTML = code;
-      Prism.highlightAll();
+      var selectedTemplate = templateSelect.value;
+      hljs.highlightAll();
 }
 
 generateTemplate()
