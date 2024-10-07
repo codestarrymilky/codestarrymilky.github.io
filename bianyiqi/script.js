@@ -5,7 +5,6 @@ var codePreview = document.getElementById("code-preview");
 
 function generateTemplate() {
       var selectedTemplate = templateSelect.value;
-      selectedTemplate.split("\n").join(";")
 
       if (selectedTemplate === "template1") {
          codeInput.value = "<p>模板1内容</p>/n13";
@@ -25,8 +24,8 @@ function previewCode() {
 }
 
 function highlightCodeInTextarea() {
-      const textareaValue = codeInput.value;
-      const highlightedCode = hljs.highlightAuto(textareaValue).value;
+      var textareaValue = codeInput.value;
+      var highlightedCode = hljs.highlightAuto(textareaValue).value;
       codeInput.value = highlightedCode;
 }
 
