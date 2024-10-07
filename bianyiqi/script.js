@@ -5,9 +5,10 @@ var codePreview = document.getElementById("code-preview");
 
 function generateTemplate() {
       var selectedTemplate = templateSelect.value;
+      selectedTemplate.split("\n").join(";")
 
       if (selectedTemplate === "template1") {
-         codeInput.value = "<p>模板1内容</p> /n 1";
+         codeInput.value = "<p>模板1内容</p>/n13";
       } else if (selectedTemplate === "template2") {
          codeInput.value = "<p>模板2内容</p>";
       } else if (selectedTemplate === "template3") {
