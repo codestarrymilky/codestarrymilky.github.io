@@ -14,14 +14,19 @@ header {
   
 nav ul {  
     list-style: none;  
-    padding: 0;  
+    padding: 5px;  
     text-align: center;  
     background: #444;  
 }  
   
 nav ul li {  
-    display: inline;  
+    display: inline; 
     margin: 0 1rem;  
+}  
+
+nav ul li:not(:nth-of-type(1),:nth-last-of-type(1)) {  
+   border-left: 2px solid #f4f4f4;
+   border-right: 2px solid #f4f4f4;
 }  
   
 nav ul li a {  
