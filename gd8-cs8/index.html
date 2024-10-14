@@ -1,1 +1,57 @@
-
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>班级网站</title>  
+    <link rel="stylesheet" href="styles.css">  
+</head>  
+<body>  
+    <header>  
+        <h1>我们的班级</h1>  
+    </header>  
+    <nav>  
+        <ul>  
+            <li><a href="#announcements">信息公告板</a></li>  
+            <li><a href="#resources">学习资源区</a></li>  
+            <li><a href="#gallery">班级相册</a></li>  
+            <li><a href="#forum">互动论坛</a></li>  
+            <li><a href="#honors">荣誉展示墙</a></li>  
+        </ul>  
+    </nav>  
+    <main>  
+        <section id="announcements">  
+            <h2>信息公告板</h2>  
+            <p>这是一个公告示例。请查看最新的班级通知。</p>  
+        </section>  
+        <section id="resources">  
+            <h2>学习资源区</h2>  
+            <ul>  
+                <li><a href="#">数学笔记</a></li>  
+                <li><a href="#">英语复习资料</a></li>  
+            </ul>  
+        </section>  
+        <section id="gallery">  
+            <h2>班级相册</h2>  
+            <img src="placeholder.jpg" alt="班级活动照片">  
+        </section>  
+        <section id="forum">  
+            <h2>互动论坛</h2>  
+            <textarea id="commentBox" placeholder="写下你的评论..."></textarea>  
+            <button onclick="addComment()">提交评论</button>  
+            <div id="commentsContainer">  
+                <!-- 评论将显示在这里 -->  
+            </div>  
+        </section>  
+        <section id="honors">  
+            <h2>荣誉展示墙</h2>  
+            <p>张三 - 数学竞赛一等奖</p>  
+            <p>李四 - 英语演讲比赛优胜者</p>  
+        </section>  
+    </main>  
+    <footer>  
+        <p>&copy; 2023 我们的班级. 版权所有.</p>  
+    </footer>  
+    <script src="scripts.js"></script>  
+</body>  
+</html>
