@@ -47,8 +47,14 @@ main {
 }  
   
 section {  
-    margin-bottom: 2rem;  
+    margin-bottom: 2rem; 
+    display: none;
 }  
+
+.side-bar{display: none}
+section:target{
+    display: block;
+}
   
 #gallery img {  
     max-width: 100%;  
