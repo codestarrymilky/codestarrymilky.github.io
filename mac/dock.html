@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mac Dock</title>
+<style>
+  #container {
+    text-align: center;
+    padding: 20px;
+    background: rgba(200,200,200,0.3);
+  }
+  .box {
+    width: 80px;
+    height: 80px;
+    background-color: lightblue;
+    margin: 10px;
+    display: inline-block;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    line-height: 80px; 
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .box:hover {
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+    z-index: 10; 
+  }
+</style>
+</head>
+<body>
+
+<div id="container">
+
+  <div class="box" data-pos="1">1</div>
+  <div class="box" data-pos="2">2</div>
+  <div class="box" data-pos="3">3</div>
+  <div class="box" data-pos="4">4</div>
+  <div class="box" data-pos="5">5</div>
+  <div class="box" data-pos="6">6</div>
+
+</div>
+
+<script>
+  const container = document.getElementById('container');
+  const amount = [-10, -20, -30]; 
+  const scale = [1.05,1.1,1.15]
+
+  function applyTransforms(event) {
+    const target = event.target;
+    if (target.classList.contains('box')) {
+      const boxes = document.querySelectorAll('.box');
+      const targetIndex = Array.from(boxes).indexOf(target);
+
+    
+      boxes.forEach((box) => {
+        box.style.transform = '';
+      });
+
+
+      target.style.transform = `translateY(${amount[2]}px) scale(${scale[2]})`; 
+
+      
+      if (targetIndex > 0) {
+        boxes[targetIndex - 1].style.transform = `translateY(${amount[1]}px) scale(${scale[1]})`; 
+      }
+
+      if (targetIndex < boxes.length - 1) {
+        boxes[targetIndex + 1].style.transform = `translateY(${amount[1]}px) scale(${scale[1]})`; 
+      }
+
+      if (targetIndex > 1) {
+        boxes[targetIndex - 2].style.transform = `translateY(${amount[0]}px) scale(${scale[0]})`; 
+      }
+     
+      if (targetIndex < boxes.length - 2) {
+        boxes[targetIndex + 2].style.transform = `translateY(${amount[0]}px) scale(${scale[0]})`; 
+      }
+    }
+  }
+ container.addEventListener('mouseover', applyTransforms);
+  container.addEventListener('mouseout', (event) => {
+    if (event.target.classList.contains('box')) {
+      document.querySelectorAll('.box').forEach((box) => {
+        box.style.transform = '';
+      });
+    }
+  });
+
+</script>
+
+</body>
+</html>
