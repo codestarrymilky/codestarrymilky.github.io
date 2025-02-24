@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无缝轮播框</title>
+    <style>
+      .slider {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+      .slider__inner {
+            display: flex;
+            width: 300%;
+            transition: transform 0.5s ease;
+        }
+
+      .slide {
+            width: 33.33%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+      .slide1 {
+            background-color: lightblue;
+        }
+
+      .slide2 {
+            background-color: lightgreen;
+        }
+
+      .slide3 {
+            background-color: pink;
+        }
+
+      .slide p {
+            font-size: 30px;
+        }
+
+      .prev,
+      .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+      .prev {
+            left: 10px;
+        }
+
+      .next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slider">
+        <div class="slider__inner" id="sliderInner">
+            <div class="slide slide1">
+                <p>幻灯片1</p>
+            </div>
+            <div class="slide slide2">
+                <p>幻灯片2</p>
+            </div>
+            <div class="slide slide3">
+                <p>幻灯片3</p>
+            </div>
+        </div>
+        <button class="prev" onclick="prevSlide()">&#10094;</button>
+        <button class="next" onclick="nextSlide()">&#10095;</button>
+    </div>
+    <script>
+        const slideIndices = [0, 1, 2];// 感觉这种好写点
+        let currentIndex = 0;
+        const sliderInner = document.getElementById('sliderInner');
+        const slides = document.querySelectorAll('.slider__inner div');
+        const slideWidth = slides[0].offsetWidth;
+
+        function showSlides() {
+            sliderInner.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slideIndices.length;
+            if (currentIndex === 0) {
+                sliderInner.style.transition = 'none';
+                sliderInner.style.transform = `translateX(-${(slideIndices.length - 1) * slideWidth}px)`;
+                requestAnimationFrame(() => {
+                    sliderInner.style.transition = 'transform 0.5s ease';
+                    showSlides();
+                });
+            } else {
+                showSlides();
+            }
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slideIndices.length) % slideIndices.length;
+            if (currentIndex === slideIndices.length - 1) {
+                sliderInner.style.transition = 'none';
+                sliderInner.style.transform = 'translateX(0)';
+                requestAnimationFrame(() => {
+                    sliderInner.style.transition = 'transform 0.5s ease';
+                    showSlides();
+                });
+            } else {
+                showSlides();
+            }
+        }
+
+        showSlides();
+    </script>
+</body>
+</html>
