@@ -195,7 +195,7 @@
         }
 
         function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, 2000);
+            autoPlayInterval = setInterval(nextSlide, 3000);
         }
 
         function stopAutoPlay() {
@@ -210,7 +210,9 @@
 
         const slider = document.querySelector('.slider');
         slider.addEventListener('mouseenter', stopAutoPlay);
+        slider.addEventListener('touchstart', stopAutoPlay);
         slider.addEventListener('mouseleave', startAutoPlay);
+        slider.addEventListener('touchend', startAutoPlay);
 
         let startX;
         let isSliding = false;
