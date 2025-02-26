@@ -271,6 +271,14 @@
                     break;
             }
         });
+
+        slider.addEventListener('wheel', function (e) {
+            if (e.deltaY > 0) {
+                prevSlide();
+            } else if (e.deltaY < 0) {
+                nextSlide();
+            }
+        });
     </script>
 </body>
 
