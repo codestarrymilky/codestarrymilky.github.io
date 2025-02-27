@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>无缝轮播框</title>
     <style>
-     .slider {
+       .slider {
             position: relative;
-            width: 800px;
-            height: 500px;
+            width: 100%;
+            height: 30rem;
             overflow: hidden;
             margin: 0 auto;
             overscroll-behavior: contain;
         }
 
-     .slider::before {
+       .slider::before {
             content: '';
             position: absolute;
             top: 0;
@@ -29,16 +29,16 @@
             z-index: 1;
         }
 
-     .slider.sliding::before {
+       .slider.sliding::before {
             opacity: 1;
         }
 
-     .slider-inner {
+       .slider-inner {
             display: flex;
             transition: transform 0.5s ease;
         }
 
-     .slide {
+       .slide {
             height: 500px;
             font-size: 400%;
             display: flex;
@@ -47,8 +47,8 @@
             width: 100%;
         }
 
-     .prev,
-     .next {
+       .prev,
+       .next {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -60,15 +60,15 @@
             cursor: pointer;
         }
 
-     .prev {
+       .prev {
             left: 10px;
         }
 
-     .next {
+       .next {
             right: 10px;
         }
 
-     .page-indicators {
+       .page-indicators {
             position: absolute;
             bottom: 10px;
             left: 50%;
@@ -76,7 +76,7 @@
             display: flex;
         }
 
-     .page-indicator {
+       .page-indicator {
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -87,7 +87,7 @@
             position: relative;
         }
 
-     .page-indicator:before {
+       .page-indicator:before {
             content: '';
             position: absolute;
             top: 0;
@@ -100,7 +100,7 @@
             transition: opacity 0.3s ease;
         }
 
-     .page-indicator.active:before {
+       .page-indicator.active:before {
             opacity: 1;
         }
     </style>
@@ -260,6 +260,7 @@
         });
 
         document.addEventListener('keydown', function (event) {
+            stopAutoPlay();
             switch (event.keyCode) {
                 case 37:
                 case 38:
@@ -270,15 +271,32 @@
                     nextSlide();
                     break;
             }
+            setTimeout(startAutoPlay, 0); // 按键处理完后立即重新开始自动播放
         });
 
-        slider.addEventListener('wheel', function (e) {
+        function debounce(func, delay) {
+            let timer;
+            return function () {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func.apply(context, args);
+                }, delay);
+            };
+        }
+
+        const debouncedWheelHandler = debounce(function (e) {
+            stopAutoPlay();
             if (e.deltaY > 0) {
                 prevSlide();
             } else if (e.deltaY < 0) {
                 nextSlide();
             }
-        });
+            setTimeout(startAutoPlay, 0);
+        }, 200);
+
+        slider.addEventListener('wheel', debouncedWheelHandler);
     </script>
 </body>
 
