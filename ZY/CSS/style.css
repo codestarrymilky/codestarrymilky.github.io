@@ -69,7 +69,7 @@
 }
 
 .topbar-content {
-    opacity: 1;
+    opacity: 0;
     height: 0;
     position: absolute;
     background-color: var(--topbar-color);
@@ -93,7 +93,7 @@
 }
 
 .top-bar:hover .topbar-content {
-    opacity: 0;
+    opacity: 1;
     height: auto;
     transition: all 1s linear;
 }
