@@ -65,6 +65,7 @@
     box-sizing: content-box;
     display: flex;
     justify-content: space-between;
+    background-color: rgba(var(--shadow-color),0.4);
     border-bottom: 0.3rem solid rgb(var(--shadow-color));
 }
 
@@ -72,7 +73,7 @@
     opacity: 0;
     height: 0;
     position: absolute;
-    background-color: var(--topbar-color);
+    background-color: rgb(var(--topbar-color));
     width: 100%;
     text-align: center;
     box-shadow: var(--shadow-1);
@@ -88,7 +89,6 @@
 
 .topbar-content a:is(:hover, :active, :focus, :focus-within){
   background-color: rgb(var(--topbar-hover-color))
-  
 }
 
 .top-bar:hover .topbar-content {
@@ -162,5 +162,37 @@
     }
 }
 
+/* header */
+
+#header {
+    height: 10rem;
+    width: 100%;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#header .title::after {
+    content: var(--title);
+    font-size: 300%;
+}
+
+#header .subtitle::after {
+    content: var(--subtitle);
+    font-size: 150%;
+}
+
+@media only screen and (max-width: 768px){
+    .title::after{font-size: 200%!important;}
+    .subtitle::after{font-size: 100%!important;}
+}
+
+@media only screen and (max-width: 320px){
+    [class*=title]::after{margin-left: 3rem;}
+}
 
 
