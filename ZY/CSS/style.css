@@ -32,12 +32,12 @@
     float: right;
 }
 
-.top-bar:not(:nth-of-last-type){
-  left: 10px;
+.barbtn:not(:nth-of-last-type){
+  right: -20px;
 }
 
-.top-bar:not(:nth-of-last-type):hover{
-  left: 0px;
+.barbtn:not(:nth-of-last-type):is(:hover, :active, :focus, :focus-within){
+  right: 0px;
   transition: all 0.2s;
 }
 
