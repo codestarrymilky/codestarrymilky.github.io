@@ -14,7 +14,7 @@
     height: 100%;
     border: none;
     cursor: pointer;
-    line-height: 1.25rem;
+    line-height: 0;
     text-align: center;
     width: 100%;
 }
