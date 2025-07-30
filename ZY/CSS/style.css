@@ -64,7 +64,8 @@
     padding: 6px;
     box-sizing: content-box;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: flex-end;
     background-color: rgba(var(--shadow-color),0.4);
     border-bottom: 0.3rem solid rgb(var(--shadow-color));
     z-index: 999;
