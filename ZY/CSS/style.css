@@ -10,7 +10,7 @@
 
 /* top bar */
 .logo{
-  background: url("http://brsandbox-pro.wikidot.com/local--files/aa/a20e2631-235f-4f64-be41-1b17a0b0aa61_removalai_preview.svg");
+  background: url("https://brsandbox-pro.wikidot.com/local--files/aa/a20e2631-235f-4f64-be41-1b17a0b0aa61_removalai_preview.svg");
   background-size: contain;
   background-repeat: no-repeat;
   float: left;
@@ -41,6 +41,8 @@
     width: calc(100% / 6);
     float: right;
 }
+
+.bar{width: 90%;}
 
 #top-bar{
     position: sticky;
