@@ -14,14 +14,14 @@
     height: 100%;
     border: none;
     cursor: pointer;
-    line-height: 2.5rem;
+    line-height: 1.25rem;
     text-align: center;
 }
 
 .top-bar {
     position: relative;
     display: inline-block;
-    height: 1.25rem;
+    height: 2.5rem;
     width: calc(80% / 6);
 }
 
