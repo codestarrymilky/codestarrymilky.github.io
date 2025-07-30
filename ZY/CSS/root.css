@@ -3,7 +3,8 @@
   --title: "卓远电子有限公司";
   --subtitle: "卓诚致远 信守不渝";
 
-  --shadow: 0px 8px 16px 0px rgba(var(--shadow-color),0.2);
+  --shadow-1: 0px 8px 16px 0px rgba(var(--shadow-color),0.2);
+  --shadow-2: 0px 8px 16px 0px rgba(var(--shadow-color),0.6);
 
   --base-color: 36,72,160;
   --secondary-color: 46,113,190;
