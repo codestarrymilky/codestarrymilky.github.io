@@ -18,5 +18,5 @@
   --title-font: var(--header-font);
   --mono-font: Recursive, "Noto Serif SC", "Noto Serif TC", Consolas, monaco, monospace;
 
-  --header-height: 5rem;
+  --header-height: 10rem;
 }
