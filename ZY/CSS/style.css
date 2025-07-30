@@ -28,7 +28,7 @@
     position: relative;
     display: inline-block;
     height: 2.5rem;
-    width: calc(80% / 6);
+    width: calc(100% / 6);
 }
 
 #top-bar{
