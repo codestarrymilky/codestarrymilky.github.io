@@ -16,6 +16,7 @@
     cursor: pointer;
     line-height: 1.25rem;
     text-align: center;
+    width: 100%;
 }
 
 .top-bar {
