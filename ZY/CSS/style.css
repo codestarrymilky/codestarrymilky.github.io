@@ -48,6 +48,7 @@
     width: 100%;
     padding: 6px;
     box-sizing: content-box;
+    background-color: rgb(var(--base-color));
 }
 
 .topbar-content {
