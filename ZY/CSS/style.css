@@ -1,0 +1,54 @@
+/* All */
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* top bar */
+.barbtn {
+    background-color: rgb(var(--base-color));
+    color: rgb(var(--font-color));
+    padding: 16px;
+    height: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.top-bar {
+    position: relative;
+    display: inline-block;
+    height: 2.5rem;
+}
+
+#top-bar{
+    position: sticky;
+    top: 0;
+    height: 2.5rem;
+    width: 100%;
+    padding: 6px;
+}
+
+.topbar-content {
+    display: none;
+    position: absolute;
+    background-color: var(--topbar-color);
+    min-width: 6rem;
+    box-shadow: 0px 8px 16px 0px rgba(var(--shadow-color),0.2);
+}
+
+.topbar-content a {
+    color: rgb(var(--shadow-color));
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.topbar-content a:is(:hover, :active, :focus, :focus-within){
+  background-color: rgb(var(--topbar-hover-color))
+}
+
+.top-bar:hover .topbar-content {
+    display: block;
+}
