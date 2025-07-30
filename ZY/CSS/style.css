@@ -21,7 +21,7 @@
 }
 
 .barbtn:nth-of-type(4){
-     font-size: 12px;
+     font-size: 10px;
 }
 
 .top-bar {
@@ -31,6 +31,8 @@
     width: calc(100% / 6);
     float: right;
 }
+
+.barbtn{position: relative;}
 
 .barbtn:not(:nth-of-last-type){
   right: -20px;
