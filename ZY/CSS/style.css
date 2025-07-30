@@ -226,7 +226,7 @@
   width: 100%;
   overflow: auto;
   height: 100vh;
-  background-color: rgba(var(--backgrounnd-color))
+  background-color: rgba(var(--background-color))
 }
 
 
