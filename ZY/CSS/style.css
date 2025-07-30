@@ -49,9 +49,9 @@
 .top-bar {
     position: relative;
     display: inline-block;
-    height: 2.5rem;
+    height: 5rem;
     width: calc(100% / 6);
-    margin-left: 7px;
+    margin-left: 1rem;
 }
 
 .bar{width: 90%;}
@@ -59,7 +59,7 @@
 #top-bar{
     position: sticky;
     top: 0;
-    height: 2.5rem;
+    height: 3rem;
     width: 100%;
     padding: 6px;
     box-sizing: content-box;
@@ -67,6 +67,7 @@
     justify-content: space-between;
     background-color: rgba(var(--shadow-color),0.4);
     border-bottom: 0.3rem solid rgb(var(--shadow-color));
+    z-index: 999;
 }
 
 .topbar-content {
@@ -102,6 +103,7 @@
         width: 8rem;
         flex-direction: column;
         border: none;
+        height: 0;
         background: none;
         position: relative;
     }
@@ -222,6 +224,8 @@
 #main-content{
   width: 100%;
   overflow: auto;
+  height: 100vh;
+  background-color: rgba(var(--shadow-color),0.5)
 }
 
 
