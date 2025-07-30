@@ -49,7 +49,7 @@
 .top-bar {
     position: relative;
     display: inline-block;
-    height: 5rem;
+    height: 3rem;
     width: calc(100% / 6);
     margin-left: 1rem;
 }
@@ -59,7 +59,7 @@
 #top-bar{
     position: sticky;
     top: 0;
-    height: 3rem;
+    height: 5rem;
     width: 100%;
     padding: 6px;
     box-sizing: content-box;
@@ -168,11 +168,11 @@
 /* header */
 
 #header {
-    height: 10rem;
+    height: var(--header-height);
     width: 100%;
-    background-color: rgba(82,141,212,0.7);
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
+    background-color: rgba(var(--header-color),0.7);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
 }
 
 #header {
@@ -225,7 +225,7 @@
   width: 100%;
   overflow: auto;
   height: 100vh;
-  background-color: rgba(var(--shadow-color),0.5)
+  background-color: rgba(var(--backgrounnd-color))
 }
 
 
