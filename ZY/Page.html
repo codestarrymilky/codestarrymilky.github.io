@@ -1,1120 +1,789 @@
+<!-- 使用了NeoFuture的配色方案 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>天津卓远电子有限公司</title>
+    <title>天津卓远电子 - 专业PCBA加工制造服务商</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     <script>
-        // 配置一手
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#165DFF', 
-                        secondary: '#36CFC9', 
-                        dark: '#1D2129', 
-                        light: '#F7F8FA', 
-                        darkBlue: '#0E2A86'
+                        primary: '#1E3A8A',    
+                        secondary: '#3B82F6',
+                        accent: '#0EA5E9',
+                        neutral: {
+                            dark: '#111827',  
+                            light: '#F9FAFB',   
+                            muted: '#9CA3AF',   
+                        }
                     },
                     fontFamily: {
-                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Roboto', 'sans-serif'],
                     },
-                    boxShadow: {
-                        'tech': '0 8px 30px rgba(22, 93, 255, 0.15)',
-                        'tech-hover': '0 12px 40px rgba(22, 93, 255, 0.25)',
+                    animation: {
+                        'glow-accent': 'glowAccent 2s ease-in-out infinite alternate',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'pulse-tech': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        glowAccent: {
+                            '0%': { boxShadow: '0 0 8px rgba(14, 165, 233, 0.4), 0 0 12px rgba(14, 165, 233, 0.2)' },
+                            '100%': { boxShadow: '0 0 16px rgba(14, 165, 233, 0.6), 0 0 24px rgba(14, 165, 233, 0.4)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
                     }
                 }
             }
         }
     </script>
+    
     <style type="text/tailwindcss">
         @layer utilities {
             .content-auto {
                 content-visibility: auto;
             }
-            .text-shadow-tech {
-                text-shadow: 0 4px 12px rgba(22, 93, 255, 0.2);
+            .text-gradient-accent {
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                background-image: linear-gradient(90deg, #3B82F6, #0EA5E9);
             }
-            .bg-gradient-tech {
-                background: linear-gradient(135deg, #165DFF 0%, #0E2A86 100%);
+            .bg-grid-tech {
+                background-image: 
+                    linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+                background-size: 30px 30px;
             }
-            .border-gradient {
-                border-image: linear-gradient(135deg, #165DFF, #36CFC9) 1;
+            .glass-tech {
+                background: rgba(17, 24, 39, 0.7);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(14, 165, 233, 0.15);
             }
-            .scroll-animate {
+            .content-section {
+                display: none;
                 opacity: 0;
-                transform: translateY(30px);
-                transition: opacity 0.8s ease, transform 0.8s ease;
+                transition: opacity 0.5s ease;
             }
-            .scroll-animate.active {
-                opacity: 1;
-                transform: translateY(0);
+            .content-section.active {
+                display: block;
+                animation: fadeIn 0.8s ease-out forwards;
             }
-            .scroll-animate-delay-1 {
-                transition-delay: 0.2s;
-            }
-            .scroll-animate-delay-2 {
-                transition-delay: 0.4s;
-            }
-            .scroll-animate-delay-3 {
-                transition-delay: 0.6s;
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
             }
         }
     </style>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        #product-list .text-sm.text-gray-500{
-            display: none;
+        .menu-icon {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-icon span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: #0EA5E9;
+            border-radius: 3px;
+            opacity: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .menu-icon span:nth-child(1) {
+            top: 8px;
+            transform: rotate(0deg);
+        }
+        
+        .menu-icon span:nth-child(2) {
+            top: 15px;
+            width: 80%;
+            left: 10%;
+        }
+        
+        .menu-icon span:nth-child(3) {
+            top: 22px;
+            transform: rotate(0deg);
+        }
+        
+        .menu-icon.open span:nth-child(1) {
+            top: 15px;
+            transform: rotate(45deg);
+        }
+        
+        .menu-icon.open span:nth-child(2) {
+            opacity: 0;
+            width: 0%;
+        }
+        
+        .menu-icon.open span:nth-child(3) {
+            top: 15px;
+            transform: rotate(-45deg);
+        }
+        
+        .nav-indicator {
+            position: absolute;
+            bottom: -2px;
+            height: 3px;
+            background: linear-gradient(90deg, #3B82F6, #0EA5E9);
+            border-radius: 3px 3px 0 0;
+            transition: all 0.4s ease;
         }
 
-        #product-list .text-primary.font-medium{width: 100%;text-align: center;}
+        @media only screen and (min-width: 768px){.progress-zy{width: 200%;}.zy-text{left:calc(50% - 1.5rem);position: relative;}}
 
-        @media only screen and (min-width: 1024px){.cp-relative{position: relative;top: 1.5rem;}}
+        #product-list img{object-fit: contain;width: 100%;height: 100%;}
     </style>
 </head>
-<body class="font-inter text-dark bg-light overflow-x-hidden">
-    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-500 bg-white/95 shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-            <div class="flex justify-between items-center py-4">
-                <a href="#" class="flex items-center space-x-2">
-                    <div class="w-20 h-10 bg-gradient-tech rounded-lg flex items-center justify-center shadow-tech">
-                        <span class="text-white font-bold text-xl">卓远</span>
+
+<body class="bg-neutral-dark text-neutral-light font-sans overflow-x-hidden">
+    <div id="page-transition" class="fixed inset-0 z-50 bg-neutral-dark opacity-0 pointer-events-none transition-opacity duration-600 flex items-center justify-center">
+        <div class="relative flex flex-col items-center">
+            <div class="w-16 h-16 relative">
+                <div class="absolute inset-0 rounded-full border-4 border-secondary/20 animate-pulse-tech"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-t-secondary border-r-accent border-b-primary border-l-transparent animate-spin"></div>
+                <div class="absolute inset-2.5 rounded-full bg-gradient-to-br from-secondary via-accent to-primary"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-dark">
+        <div class="relative flex flex-col items-center">
+            <div class="w-20 h-20 relative mb-4">
+                <div class="absolute inset-0 rounded-full border-4 border-secondary/20 animate-pulse-tech"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-t-secondary border-r-accent border-b-primary border-l-transparent animate-spin"></div>
+                <div class="absolute inset-3 rounded-full bg-gradient-to-br from-secondary via-accent to-primary"></div>
+            </div>
+            <p class="font-display text-lg text-gradient-accent">LOADING...</p>
+        </div>
+    </div>
+
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-500 py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="#home" class="nav-link flex items-center space-x-3 group">
+                    <div class="w-11 h-11 rounded-lg bg-gradient-to-br from-secondary via-accent to-primary flex items-center justify-center transition-transform duration-300 group-hover:rotate-12 animate-glow-accent">
+                        <span class="font-display font-bold text-xl text-neutral-dark"><img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/logo-removebg-preview.png" style="object-fit: contain;"></span>
                     </div>
-                    <span class="text-xl font-bold text-primary hidden sm:inline-block lg:text-2xl">天津卓远电子</span>
+                    <span class="font-display font-bold text-xl md:text-2xl">
+                        <span class="text-secondary">天津卓远电子</span><span class="text-accent">有限公司</span>
+                    </span>
                 </a>
-
-                <nav class="hidden md:flex space-x-8 lg:space-x-12">
-                    <a href="#about" class="text-dark hover:text-primary transition-colors font-medium text-lg">企业概况</a>
-                    <a href="#products" class="text-dark hover:text-primary transition-colors font-medium text-lg">产品中心</a>
-                    <a href="#production" class="text-dark hover:text-primary transition-colors font-medium text-lg">生产实力</a>
-                    <a href="#certification" class="text-dark hover:text-primary transition-colors font-medium text-lg">品质认证</a>
-                    <a href="#partners" class="text-dark hover:text-primary transition-colors font-medium text-lg">合作伙伴</a>
-                    <a href="#contact" class="text-dark hover:text-primary transition-colors font-medium text-lg">联系我们</a>
-                </nav>
-
-                <button id="menuBtn" class="md:hidden text-dark text-2xl hover:text-primary transition-colors" style="position: relative;left: -2rem;">
-                    <i class="fa fa-bars"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-100 shadow-lg">
-            <div class="container mx-auto px-4 py-3 space-y-3">
-                <a href="#about" class="block py-3 px-4 text-dark hover:bg-primary/5 hover:text-primary rounded-lg transition-all text-lg">企业概况</a>
-                <a href="#products" class="block py-3 px-4 text-dark hover:bg-primary/5 hover:text-primary rounded-lg transition-all text-lg">产品中心</a>
-                <a href="#production" class="block py-3 px-4 text-dark hover:bg-primary/5 hover:text-primary rounded-lg transition-all text-lg">生产实力</a>
-                <a href="#certification" class="block py-3 px-4 text-dark hover:bg-primary/5 hover:text-primary rounded-lg transition-all text-lg">品质认证</a>
-                <a href="#partners" class="block py-3 px-4 text-dark hover:bg-primary/5 hover:text-primary rounded-lg transition-all text-lg">合作伙伴</a>
-                <a href="#contact" class="block py-3 px-4 text-dark hover:bg-primary/5 hover:text-primary rounded-lg transition-all text-lg">联系我们</a>
-            </div>
-        </div>
-    </header>
-
-    <section class="pt-28 pb-16 md:pt-36 md:pb-24 lg:pt-44 lg:pb-32 bg-gradient-tech text-white relative overflow-hidden">
-
-        <div class="absolute top-0 left-0 w-full h-full opacity-10">
-            <div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-white blur-3xl"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-secondary blur-3xl"></div>
-            <div class="absolute top-1/2 left-1/3 w-32 h-32 rounded-full bg-white blur-2xl"></div>
-        </div>
-        
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-shadow-tech leading-tight">
-                    卓诚致远 信守不渝
-                </h1>
-                <p class="text-xl md:text-2xl lg:text-2xl mb-8 opacity-90 leading-relaxed">
-                    专注PCBA加工制造的高新技术企业<br class="hidden sm:block">为您提供高品质电子制造解决方案
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
-                    <a href="#contact" class="bg-white text-primary font-medium py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300 text-lg">
-                        <i class="fa fa-handshake-o mr-2"></i>咨询合作
+                
+                <div class="hidden md:flex items-center space-x-8 relative">
+                    <a href="#home" class="nav-link font-medium relative overflow-hidden py-2 transition-all duration-300 hover:text-secondary active-nav" data-target="home">
+                        <span class="relative z-10">首页</span>
                     </a>
-                    <a href="#products" class="bg-transparent border-2 border-white text-white font-medium py-3 px-8 rounded-lg hover:bg-white/10 transition-all hover:shadow-lg transform hover:-translate-y-1 duration-300 text-lg">
-                        <i class="fa fa-product-hunt mr-2"></i>查看产品
+                    <a href="#advantages" class="nav-link font-medium relative overflow-hidden py-2 transition-all duration-300 hover:text-accent" data-target="advantages">
+                        <span class="relative z-10">核心优势</span>
                     </a>
+                    <a href="#products" class="nav-link font-medium relative overflow-hidden py-2 transition-all duration-300 hover:text-secondary" data-target="products">
+                        <span class="relative z-10">产品中心</span>
+                    </a>
+                    <a href="#strength" class="nav-link font-medium relative overflow-hidden py-2 transition-all duration-300 hover:text-accent" data-target="strength">
+                        <span class="relative z-10">企业实力</span>
+                    </a>
+                    <a href="#contact" class="bg-gradient-to-r from-secondary via-accent to-primary text-neutral-dark px-6 py-2.5 rounded-lg font-medium transition-all duration-300 hover:animate-glow-accent">
+                        联系我们
+                    </a>
+                    
+                    <div class="nav-indicator" style="width: 40px;left: 0;"></div>
                 </div>
                 
-                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
-                    <a href="#about" class="text-white opacity-70 hover:opacity-100 transition-opacity">
-                        <i class="fa fa-angle-down text-3xl"></i>
+                <button id="menu-toggle" class="md:hidden focus:outline-none">
+                    <div class="menu-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+            </div>
+            
+            <div id="mobile-menu" class="md:hidden hidden mt-4 glass-tech rounded-xl p-4 transition-all duration-500 max-h-0 overflow-hidden">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="mobile-nav-link py-3 border-b border-accent/10 text-secondary transition-all duration-300 active-mobile-nav">首页</a>
+                    <a href="#advantages" class="mobile-nav-link py-3 border-b border-accent/10 text-neutral-light hover:text-secondary transition-all duration-300">核心优势</a>
+                    <a href="#products" class="mobile-nav-link py-3 border-b border-accent/10 text-neutral-light hover:text-accent transition-all duration-300">产品中心</a>
+                    <a href="#strength" class="mobile-nav-link py-3 border-b border-accent/10 text-neutral-light hover:text-secondary transition-all duration-300">企业实力</a>
+                    <a href="#contact" class="bg-gradient-to-r from-secondary via-accent to-primary text-neutral-dark px-6 py-3 rounded-lg font-medium text-center mt-2 transition-all duration-300 hover:animate-glow-accent">
+                        联系我们
                     </a>
                 </div>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <section id="about" class="py-16 md:py-24 lg:py-32 bg-white">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-            <div class="text-center mb-12 md:mb-16 lg:mb-20">
-                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 scroll-animate">企业概况</h2>
-                <div class="w-20 h-1 bg-gradient-tech mx-auto scroll-animate scroll-animate-delay-1"></div>
+    <main class="pt-20">
+        <section id="home" class="py-20 md:py-32 relative bg-grid-tech overflow-hidden content-section active">
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute top-1/4 -left-40 w-96 h-96 bg-secondary/10 rounded-full filter blur-3xl animate-pulse-tech"></div>
+                <div class="absolute bottom-1/3 -right-20 w-80 h-80 bg-accent/10 rounded-full filter blur-3xl animate-pulse-tech" style="animation-delay: 1.5s;"></div>
+                <div class="absolute top-20 right-1/4 w-40 h-40 bg-primary/10 rounded-full filter blur-3xl animate-pulse-tech" style="animation-delay: 3s;"></div>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
-                <div class="scroll-animate">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-6 text-darkBlue">关于卓远</h3>
-                    <p class="mb-4 text-lg md:text-xl text-gray-700 leading-relaxed">
-                        天津卓远电子有限公司成立于2018年9月，前身为韩系独资电子企业，韩国法人撤资后由中方接手创立，是一家专注于PCBA加工制造的高新技术企业。
-                    </p>
-                    <p class="mb-4 text-lg md:text-xl text-gray-700 leading-relaxed">
-                        公司位于天津市津南经济开发区东区聚英路中宏道5号，距天津机场30公里，距塘沽港40公里，交通便利。工厂占地面积2500㎡，年产能力达500万台，可满足各类电子制造需求。
-                    </p>
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed">
-                        公司秉承"品质、服务、效率"的经营宗旨，已形成成熟的生产工艺、严格的过程控制、精湛的生产技术和完善的品质控制体系，为客户提供从产品工艺分析到工程构筑的全流程支持。
-                    </p>
-                </div>
-                <div class="bg-white rounded-xl shadow-tech hover:shadow-tech-hover transition-all duration-500 overflow-hidden scroll-animate scroll-animate-delay-1">
-                    <img src="https://picsum.photos/id/180/800/600" alt="卓远电子工厂环境" class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700">
-                </div>
-            </div>
-
-            <div class="mt-20 lg:mt-28 scroll-animate">
-                <h3 class="text-2xl md:text-3xl font-bold text-center mb-12 lg:mb-16 text-darkBlue">发展历程</h3>
-                <div class="relative max-w-5xl mx-auto">
-                    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary to-secondary"></div>
-                    
-                    <div class="space-y-12 lg:space-y-20 relative">
-                        <!-- 2018年 -->
-                        <div class="flex flex-col md:flex-row items-center scroll-animate">
-                            <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1 lg:pr-20">
-                                <h4 class="text-xl md:text-2xl font-bold text-primary mb-2">2018年</h4>
-                                <p class="bg-white text-lg text-gray-700 lg:text-xl">卓远电子正式成立，前身为韩系独资电子企业，韩国法人撤资后由中方接手创立</p>
-                            </div>
-                            <div class="z-10 w-10 h-10 bg-gradient-tech rounded-full flex items-center justify-center text-white font-bold mb-4 md:mb-0 order-1 md:order-2 shadow-tech hover:shadow-lg transition-shadow">
-                                18
-                            </div>
-                            <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
-                        </div>
-
-                        <!-- 2019年 -->
-                        <div class="flex flex-col md:flex-row items-center scroll-animate scroll-animate-delay-1">
-                            <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
-                            <div class="z-10 w-10 h-10 bg-gradient-tech rounded-full flex items-center justify-center text-white font-bold mb-4 md:mb-0 shadow-tech hover:shadow-lg transition-shadow">
-                                19
-                            </div>
-                            <div class="md:w-1/2 md:pl-12 lg:pl-20">
-                                <h4 class="text-xl md:text-2xl font-bold text-primary mb-2">2019年</h4>
-                                <p class="bg-white text-lg text-gray-700 lg:text-xl">主要服务于三星电视背光业务，涉及大尺寸LCD背光、电池控制管理相关业务</p>
-                            </div>
-                        </div>
-
-                        <!-- 2020年 -->
-                        <div class="flex flex-col md:flex-row items-center scroll-animate scroll-animate-delay-2">
-                            <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1 lg:pr-20">
-                                <h4 class="text-xl md:text-2xl font-bold text-primary mb-2">2020年</h4>
-                                <p class="bg-white text-lg text-gray-700 lg:text-xl">与钛极智能达成合作，物联网产品投产；无线充电桩项目启动；与京仁电子合作遥控器研发业务</p>
-                            </div>
-                            <div class="z-10 w-10 h-10 bg-gradient-tech rounded-full flex items-center justify-center text-white font-bold mb-4 md:mb-0 order-1 md:order-2 shadow-tech hover:shadow-lg transition-shadow">
-                                20
-                            </div>
-                            <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
-                        </div>
-
-                        <!-- 2021年 -->
-                        <div class="flex flex-col md:flex-row items-center scroll-animate scroll-animate-delay-1">
-                            <div class="bg-white md:w-1/2 md:pr-12 hidden md:block"></div>
-                            <div class="z-10 w-10 h-10 bg-gradient-tech rounded-full flex items-center justify-center text-white font-bold mb-4 md:mb-0 shadow-tech hover:shadow-lg transition-shadow">
-                                21
-                            </div>
-                            <div class="md:w-1/2 md:pl-12 lg:pl-20">
-                                <h4 class="text-xl md:text-2xl font-bold text-primary mb-2">2021年</h4>
-                                <p class="bg-white text-lg text-gray-700 lg:text-xl">与可感可知战略合作，试产热失控探测器；与柯顿医疗、九安合作生产额温枪；获ISO9001/14001认证</p>
-                            </div>
-                        </div>
-
-                        <!-- 2022年 -->
-                        <div class="flex flex-col md:flex-row items-center scroll-animate scroll-animate-delay-2">
-                            <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1 lg:pr-20">
-                                <h4 class="text-xl md:text-2xl font-bold text-primary mb-2">2022年</h4>
-                                <p class="bg-white text-lg text-gray-700 lg:text-xl">与VELUX开展战略合作，进行配套消防柜生产；获北京可感可知"2022年度优秀服务商"称号</p>
-                            </div>
-                            <div class="z-10 w-10 h-10 bg-gradient-tech rounded-full flex items-center justify-center text-white font-bold mb-4 md:mb-0 order-1 md:order-2 shadow-tech hover:shadow-lg transition-shadow">
-                                22
-                            </div>
-                            <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
-                        </div>
-
-                        <!-- 2023年 -->
-                        <div class="flex flex-col md:flex-row items-center scroll-animate scroll-animate-delay-1">
-                            <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
-                            <div class="z-10 w-10 h-10 bg-gradient-tech rounded-full flex items-center justify-center text-white font-bold mb-4 md:mb-0 shadow-tech hover:shadow-lg transition-shadow">
-                                23
-                            </div>
-                            <div class="md:w-1/2 md:pl-12 lg:pl-20">
-                                <h4 class="text-xl md:text-2xl font-bold text-primary mb-2">2023年</h4>
-                                <p class="bg-white text-lg text-gray-700 lg:text-xl">自主开发农业用卷膜机上市；获"天津市创新型中小企业"称号；认定为国家高新技术企业（证书号：GR202312000254）</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-24 lg:mt-32 scroll-animate">
-                    <h3 class="text-2xl md:text-3xl font-bold text-center mb-12 lg:mb-16 text-darkBlue">组织架构与人员规模</h3>
-                    <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-                        <div class="bg-white rounded-xl shadow-tech p-6 md:p-8 lg:p-10 scroll-animate scroll-animate-delay-1">
-                            <h4 class="text-xl md:text-2xl font-bold mb-6 text-primary">组织架构</h4>
-                            <div class="flex flex-col space-y-4">
-                                <div class="flex items-center p-4 bg-primary/5 rounded-lg">
-                                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white mr-4">
-                                        <i class="fa fa-user-circle-o text-xl"></i>
-                                    </div>
-                                    <span class="text-lg font-medium">总经理</span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 pl-4">
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-cog"></i>
-                                        </div>
-                                        <span class="text-base font-medium">管理部</span>
-                                    </div>
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-line-chart"></i>
-                                        </div>
-                                        <span class="text-base font-medium">营业部</span>
-                                    </div>
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-money"></i>
-                                        </div>
-                                        <span class="text-base font-medium">财务部</span>
-                                    </div>
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-flask"></i>
-                                        </div>
-                                        <span class="text-base font-medium">生产技术部</span>
-                                    </div>
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-industry"></i>
-                                        </div>
-                                        <span class="text-base font-medium">生产管理部</span>
-                                    </div>
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-check-square-o"></i>
-                                        </div>
-                                        <span class="text-base font-medium">品质部</span>
-                                    </div>
-                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                        <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white mr-3">
-                                            <i class="fa fa-cubes"></i>
-                                        </div>
-                                        <span class="text-base font-medium">资材部</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="scroll-animate scroll-animate-delay-2">
-                            <h4 class="text-xl md:text-2xl font-bold mb-6 text-primary">人员规模（截至2024.12.31）</h4>
-                            <div class="overflow-x-auto">
-                                <table class="w-full border-collapse bg-white rounded-xl shadow-tech">
-                                    <thead>
-                                        <tr class="bg-gradient-tech text-white">
-                                            <th class="py-4 px-6 text-left rounded-tl-xl">部门</th>
-                                            <th class="py-4 px-6 text-left">人数</th>
-                                            <th class="py-4 px-6 text-left">部门</th>
-                                            <th class="py-4 px-6 text-left rounded-tr-xl">人数</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">管理部</td>
-                                            <td class="py-4 px-6">6人</td>
-                                            <td class="py-4 px-6 font-medium">生产/管理部</td>
-                                            <td class="py-4 px-6">60人</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">营业部</td>
-                                            <td class="py-4 px-6">1人</td>
-                                            <td class="py-4 px-6 font-medium">品质部</td>
-                                            <td class="py-4 px-6">8人</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">财务部</td>
-                                            <td class="py-4 px-6">1人</td>
-                                            <td class="py-4 px-6 font-medium">资材部</td>
-                                            <td class="py-4 px-6">6人</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">生产技术部</td>
-                                            <td class="py-4 px-6">4人</td>
-                                            <td class="py-4 px-6 font-medium text-primary">总计</td>
-                                            <td class="py-4 px-6 font-medium text-primary">86人</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p class="mt-6 text-lg text-gray-700">
-                                公司团队结构合理，生产技术人员占比超70%，拥有丰富的PCBA加工制造经验，可快速响应客户需求，保障生产效率与产品品质。
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="products" class="py-16 md:py-24 lg:py-32 bg-light">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-                <div class="text-center mb-12 md:mb-16 lg:mb-20">
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 scroll-animate">产品中心</h2>
-                    <div class="w-20 h-1 bg-gradient-tech mx-auto scroll-animate scroll-animate-delay-1"></div>
-                    <p class="mt-6 text-xl text-gray-700 max-w-3xl mx-auto scroll-animate scroll-animate-delay-2">
-                        覆盖消费电子、汽车电子、工业电子、物联网等多个领域，提供OEM/ODM一站式电子制造服务
-                    </p>
-                </div>
-
-                <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12 lg:mb-16 scroll-animate">
-                    <button class="product-tab active px-5 py-2 rounded-full bg-primary text-white font-medium text-sm md:text-base transition-all" data-tab="all">
-                        全部产品
-                    </button>
-                    <button class="product-tab px-5 py-2 rounded-full bg-white text-gray-700 font-medium text-sm md:text-base shadow-sm hover:shadow transition-all" data-tab="consumer">
-                        消费电子
-                    </button>
-                    <button class="product-tab px-5 py-2 rounded-full bg-white text-gray-700 font-medium text-sm md:text-base shadow-sm hover:shadow transition-all" data-tab="automotive">
-                        汽车电子
-                    </button>
-                    <button class="product-tab px-5 py-2 rounded-full bg-white text-gray-700 font-medium text-sm md:text-base shadow-sm hover:shadow transition-all" data-tab="industrial">
-                        工业电子
-                    </button>
-                    <button class="product-tab px-5 py-2 rounded-full bg-white text-gray-700 font-medium text-sm md:text-base shadow-sm hover:shadow transition-all" data-tab="iot">
-                        物联网产品
-                    </button>
-                    <button class="product-tab px-5 py-2 rounded-full bg-white text-gray-700 font-medium text-sm md:text-base shadow-sm hover:shadow transition-all" data-tab="energy">
-                        储能相关
-                    </button>
-                </div>
-
-
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 scroll-animate" id="product-list">
-                    <div class="product-item" data-category="consumer">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/96/600/400" alt="三星49寸曲面屏背光板" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-primary text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    消费电子
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">三星49寸曲面屏背光板</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    OEM模式生产，LED PCB尺寸440*232MM，适用于三星曲面电视，具备高亮度、低功耗、长寿命特性。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：电视显示</span>
-                                    <span class="text-sm text-gray-500">客户：三星</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="consumer">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/237/600/400" alt="额温枪PCBA" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-primary text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    消费电子
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">额温枪PCBA组件</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    与九安合作生产，包含主控PCB、电源PCB、显示PCB，支持非接触式温度测量，精度±0.3℃，响应速度快。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：医疗测温</span>
-                                    <span class="text-sm text-gray-500">客户：九安</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="consumer">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/4/600/400" alt="电动牙刷PCBA" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-primary text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    消费电子
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">电动牙刷PCBA组件</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    支持多档位震动调节，包含充电管理模块、电机驱动模块，具备过充保护、低压报警功能，适配多种刷头类型。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：个人护理</span>
-                                    <span class="text-sm text-gray-500">客户：倍至</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="product-item" data-category="automotive">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/111/600/400" alt="汽车大灯水平调整装置" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-secondary text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    汽车电子
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">汽车大灯水平调整装置</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    OEM模式为现代起亚配套，支持根据车辆载重自动调节大灯角度，具备CAN总线通信功能，工作温度-40℃~85℃。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：汽车照明</span>
-                                    <span class="text-sm text-gray-500">客户：现代、起亚</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="industrial">
-                                     <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/160/600/400" alt="漏电断路器PCBA" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-secondary text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    工业电子
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">漏电断路器PCBA</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    为施耐德配套生产，具备过载保护、短路保护、漏电保护功能，分断能力高，响应时间≤0.1s，符合工业安全标准。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：电力配电</span>
-                                    <span class="text-sm text-gray-500">客户：施耐德</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="industrial">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/119/600/400" alt="环境空气质量监测设备" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-secondary text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    工业电子
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">环境空气质量监测设备</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    支持PM2.5、CO、SO₂等多参数检测，具备数据无线传输功能，适配应急监测车与固定监测点，检测精度达国家二级标准。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：环保监测</span>
-                                    <span class="text-sm text-gray-500">OEM定制</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-  
-                    <div class="product-item" data-category="iot">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/180/600/400" alt="物联网智能水表" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-primary/80 text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    物联网产品
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">物联网智能水表PCBA</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    支持NB-IoT无线通信，具备远程抄表、水量异常报警、阶梯计费功能，电池寿命≥6年，防水等级IP68。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：智慧水务</span>
-                                    <span class="text-sm text-gray-500">客户：钛极智能</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="iot">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/201/600/400" alt="农业用卷膜机" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-primary/80 text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    物联网产品
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">农业物联网无线卷膜机</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    ODM自主开发，支持无线遥控与自动化控制，额定电压DC24V，扭矩80NM，可精细设置温室通风面积，安装效率提升50%。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：智慧农业</span>
-                                    <span class="text-sm text-gray-500">自主产品</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="iot">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/239/600/400" alt="物联网养老设备" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-primary/80 text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    物联网产品
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">物联网智能养老套装</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    包含智能一键呼4G、人体感应器、可燃气体探测器，支持紧急报警、活动监测、危险预警，适配养老机构与家庭场景。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：智慧养老</span>
-                                    <span class="text-sm text-gray-500">OEM定制</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="energy">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/103/600/400" alt="热失控探测预警器" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-secondary/80 text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    储能相关
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">储能热失控探测预警器</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    与可感可知合作，支持电池箱温度、气体浓度实时监测，预警响应时间≤1s，具备声光报警与数据上传功能，适配储能电站。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：储能安全</span>
-                                    <span class="text-sm text-gray-500">客户：可感可知</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="energy">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/105/600/400" alt="储能电站火灾报警装置" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-secondary/80 text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    储能相关
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">储能电站火灾报警控制装置</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    支持主电/备电双模式运行，具备多区域火灾监测、联动消防设备功能，防护等级IP54，工作温度-20℃~70℃，符合储能安全标准。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：储能消防</span>
-                                    <span class="text-sm text-gray-500">客户：可感可知</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-category="energy">
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 h-full flex flex-col">
-                            <div class="relative h-48 md:h-56 overflow-hidden">
-                                <img src="https://picsum.photos/id/116/600/400" alt="储能消防集成系统" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                                <div class="absolute top-3 left-3 bg-secondary/80 text-white text-xs font-medium py-1 px-3 rounded-full">
-                                    储能相关
-                                </div>
-                            </div>
-                            <div class="p-5 md:p-6 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold text-darkBlue mb-2">储能消防集成系统模块箱</h3>
-                                <p class="text-gray-700 mb-4 flex-grow">
-                                    集成火灾探测、报警、灭火控制功能，支持MODBUS通信协议，可与储能管理系统联动，模块化设计便于安装与维护。
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-medium">应用：储能系统</span>
-                                    <span class="text-sm text-gray-500">OEM定制</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="production" class="py-16 md:py-24 lg:py-32 bg-white">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-                <div class="text-center mb-12 md:mb-16 lg:mb-20">
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 scroll-animate">生产实力</h2>
-                    <div class="w-20 h-1 bg-gradient-tech mx-auto scroll-animate scroll-animate-delay-1"></div>
-                    <p class="mt-6 text-xl text-gray-700 max-w-3xl mx-auto scroll-animate scroll-animate-delay-2">
-                        配备行业高标准生产设备与无尘车间，实现高效、精准的PCBA加工制造，年产能力达500万台
-                    </p>
-                </div>
-
-                <div class="mb-20 scroll-animate">
-                    <h3 class="text-2xl md:text-3xl font-bold text-center mb-10 text-darkBlue">工厂布局</h3>
-                    <div class="bg-white rounded-xl shadow-tech p-6 md:p-8 lg:p-10 overflow-hidden relative">
-
-                        <div class="absolute top-0 left-0 w-full h-full opacity-5">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-tech"></div>
-                            <div class="absolute bottom-0 right-0 w-1/2 h-1 bg-gradient-tech"></div>
-                            <div class="absolute top-1/2 left-0 w-1/3 h-1 bg-secondary"></div>
+            
+            <div class="absolute top-1/3 right-1/3 w-20 h-20 border border-secondary/30 rotate-45 animate-float-slow"></div>
+            <div class="absolute bottom-1/4 left-1/4 w-16 h-16 rounded-full border border-accent/30 animate-float-slow" style="animation-delay: 2s;"></div>
+            <div class="absolute top-2/3 right-1/4 w-24 h-24 rounded-lg border border-primary/30 animate-float-slow" style="animation-delay: 4s;"></div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left" data-section="hero-text">
+                        <span class="inline-block px-4 py-1.5 glass-tech rounded-full text-accent text-sm font-medium mb-6">
+                            高新技术企业 · PCBA专业制造商
+                        </span>
+                        <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-display font-bold leading-tight mb-6">
+                            专注<span class="text-gradient-accent">PCBA加工制造</span>，<br>
+                            赋能多行业智能升级
+                        </h1>
+                        <p class="text-neutral-muted text-lg md:text-xl mb-8 max-w-lg mx-auto md:mx-0">
+                            天津卓远电子位于天津津南经济开发区，前身为韩系独资电子企业，现专注于PCBA加工制造，拥有松下、三星高速贴片机等行业高标准设备，年产能力500万台，为消费电子、汽车电子、工业电子等领域提供优质服务。
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                            <a href="#products" class="bg-gradient-to-r from-secondary via-accent to-primary text-neutral-dark px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:animate-glow-accent">
+                                浏览产品
+                            </a>
+                            <a href="#advantages" class="glass-tech hover:bg-neutral-dark/90 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 border border-secondary/20">
+                                了解优势 <i class="fa fa-arrow-right ml-2 text-secondary"></i>
+                            </a>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 relative z-10">
-                            <div class="bg-light rounded-lg p-4 md:p-6 flex flex-col items-center text-center hover:bg-primary/5 transition-colors">
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fa fa-microchip text-primary text-2xl"></i>
-                                </div>
-                                <h4 class="text-xl font-bold mb-2 text-darkBlue">SMT贴片线</h4>
-                                <p class="text-gray-700">3条中高速贴片线，支持BGA、QFN、0201等精密元件贴装</p>
+                        <div class="grid grid-cols-3 gap-4 mt-12">
+                            <div class="text-center p-4 glass-tech rounded-lg">
+                                <div class="text-3xl font-bold text-secondary mb-1">500万</div>
+                                <div class="text-xs text-neutral-muted">年产能力(台)</div>
                             </div>
-                            <div class="bg-light rounded-lg p-4 md:p-6 flex flex-col items-center text-center hover:bg-primary/5 transition-colors">
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fa fa-cogs text-primary text-2xl"></i>
-                                </div>
-                                <h4 class="text-xl font-bold mb-2 text-darkBlue">PBA流水线</h4>
-                                <p class="text-gray-700">3条精密自动流水线+4条一般组装线，覆盖高精度与常规产品组装</p>
+                            <div class="text-center p-4 glass-tech rounded-lg">
+                                <div class="text-3xl font-bold text-accent mb-1">190万点</div>
+                                <div class="text-xs text-neutral-muted">SMT日产能</div>
                             </div>
-                            <div class="bg-light rounded-lg p-4 md:p-6 flex flex-col items-center text-center hover:bg-primary/5 transition-colors">
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fa fa-fire text-primary text-2xl"></i>
-                                </div>
-                                <h4 class="text-xl font-bold mb-2 text-darkBlue">手焊接车间</h4>
-                                <p class="text-gray-700">专业处理异形件、直插件手动焊接，保障特殊工艺需求</p>
-                            </div>
-                            <div class="bg-light rounded-lg p-4 md:p-6 flex flex-col items-center text-center hover:bg-primary/5 transition-colors">
-                                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fa fa-archive text-primary text-2xl"></i>
-                                </div>
-                                <h4 class="text-xl font-bold mb-2 text-darkBlue">仓储系统</h4>
-                                <p class="text-gray-700">电子物料仓、组装物料仓、成品出荷仓，分区管理高效便捷</p>
+                            <div class="text-center p-4 glass-tech rounded-lg">
+                                <div class="text-3xl font-bold text-primary mb-1">86人</div>
+                                <div class="text-xs text-neutral-muted">专业团队</div>
                             </div>
                         </div>
-                        
-                        <div class="mt-8 md:mt-12">
-                            <img src="https://picsum.photos/id/26/1200/400" alt="工厂布局图" class="w-full h-auto rounded-lg shadow-md">
-                        </div>
-                    </div>
-                </div>
 
-                <div class="grid md:grid-cols-2 gap-12 lg:gap-16 mb-20">
-                    <div class="scroll-animate">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-darkBlue flex items-center">
-                            <i class="fa fa-microchip text-primary mr-3"></i>SMT生产设备
-                                                    </h3>
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden">
-                            <div class="overflow-x-auto">
-                                <table class="w-full border-collapse">
-                                    <thead>
-                                        <tr class="bg-gradient-tech text-white">
-                                            <th class="py-4 px-6 text-left rounded-tl-xl">设备类型</th>
-                                            <th class="py-4 px-6 text-left">制造公司</th>
-                                            <th class="py-4 px-6 text-left">性能</th>
-                                            <th class="py-4 px-6 text-left rounded-tr-xl">数量</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">高速贴片机</td>
-                                            <td class="py-4 px-6">Panasonic CM602</td>
-                                            <td class="py-4 px-6">高速高精度贴片</td>
-                                            <td class="py-4 px-6">1台</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">高速贴片机</td>
-                                            <td class="py-4 px-6">Panasonic CM402</td>
-                                            <td class="py-4 px-6">高速高精度贴片</td>
-                                            <td class="py-4 px-6">1台</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">高速贴片机</td>
-                                            <td class="py-4 px-6">YAMAHA YSM20/10</td>
-                                            <td class="py-4 px-6">高速贴片</td>
-                                            <td class="py-4 px-6">1台</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">AOI检测设备</td>
-                                            <td class="py-4 px-6">-</td>
-                                            <td class="py-4 px-6">自动光学检测</td>
-                                            <td class="py-4 px-6">多台</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">SPI检测设备</td>
-                                            <td class="py-4 px-6">-</td>
-                                            <td class="py-4 px-6">3D锡膏检测</td>
-                                            <td class="py-4 px-6">多台</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium text-primary" colspan="2">生产能力</td>
-                                            <td class="py-4 px-6 font-medium">190万点/日</td>
-                                            <td class="py-4 px-6 font-medium text-primary">总计3条线</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="p-6 bg-light">
-                                <img src="https://picsum.photos/id/175/800/400" alt="SMT生产线" class="w-full h-auto rounded-lg shadow-sm">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scroll-animate scroll-animate-delay-1">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-darkBlue flex items-center">
-                            <i class="fa fa-industry text-primary mr-3"></i>MI生产设备
-                        </h3>
-                        <div class="bg-white rounded-xl shadow-tech overflow-hidden">
-                            <div class="overflow-x-auto">
-                                <table class="w-full border-collapse">
-                                    <thead>
-                                        <tr class="bg-gradient-tech text-white">
-                                            <th class="py-4 px-6 text-left rounded-tl-xl">设备类型</th>
-                                            <th class="py-4 px-6 text-left">制造公司</th>
-                                            <th class="py-4 px-6 text-left">工艺类型</th>
-                                            <th class="py-4 px-6 text-left rounded-tr-xl">产能</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium">波峰焊线</td>
-                                            <td class="py-4 px-6">劲拓300L</td>
-                                            <td class="py-4 px-6">有铅焊接</td>
-                                            <td class="py-4 px-6">10K/21HR</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium" colspan="2">焊接能力</td>
-                                            <td class="py-4 px-6">-</td>
-                                            <td class="py-4 px-6">20万点/日</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium" colspan="2">组装能力</td>
-                                            <td class="py-4 px-6">-</td>
-                                            <td class="py-4 px-6">40K/日</td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium" colspan="2">检查能力</td>
-                                            <td class="py-4 px-6">-</td>
-                                            <td class="py-4 px-6">40K/日</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="py-4 px-6 font-medium" colspan="2">出荷能力</td>
-                                            <td class="py-4 px-6">-</td>
-                                            <td class="py-4 px-6">40K/日</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="p-6 bg-light">
-                                <img src="https://picsum.photos/id/28/800/400" alt="MI生产线" class="w-full h-auto rounded-lg shadow-sm">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="scroll-animate">
-                    <h3 class="text-2xl md:text-3xl font-bold text-center mb-10 text-darkBlue">品质检测流程</h3>
-                    <div class="relative">
-                        <div class="hidden md:block absolute left-0 right-0 top-1/2 h-1 bg-gradient-tech transform -translate-y-1/2 z-0"></div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10">
-                            <div class="bg-white rounded-xl shadow-tech p-5 flex flex-col items-center text-center hover:shadow-tech-hover transition-all transform hover:-translate-y-1 duration-300">
-                                <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white mb-4">
-                                    <span class="font-bold text-xl">1</span>
-                                </div>
-                                <h4 class="text-lg font-bold mb-2 text-darkBlue">锡膏搅拌</h4>
-                                <p class="text-gray-700 text-sm">确保锡膏均匀性，保障焊接质量稳定性</p>
-                            </div>
-                            <div class="bg-white rounded-xl shadow-tech p-5 flex flex-col items-center text-center hover:shadow-tech-hover transition-all transform hover:-translate-y-1 duration-300">
-                                <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white mb-4">
-                                    <span class="font-bold text-xl">2</span>
-                                </div>
-                                <h4 class="text-lg font-bold mb-2 text-darkBlue">SPI检测</h4>
-                                <p class="text-gray-700 text-sm">3D锡膏检测，精确测量锡膏体积、形状、偏移</p>
-                            </div>
-                            <div class="bg-white rounded-xl shadow-tech p-5 flex flex-col items-center text-center hover:shadow-tech-hover transition-all transform hover:-translate-y-1 duration-300">
-                                <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white mb-4">
-                                    <span class="font-bold text-xl">3</span>
-                                </div>
-                                <h4 class="text-lg font-bold mb-2 text-darkBlue">LCR测定</h4>
-                                <p class="text-gray-700 text-sm">元件参数测试，确保元件性能符合设计要求</p>
-                            </div>
-                            <div class="bg-white rounded-xl shadow-tech p-5 flex flex-col items-center text-center hover:shadow-tech-hover transition-all transform hover:-translate-y-1 duration-300">
-                                <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white mb-4">
-                                    <span class="font-bold text-xl">4</span>
-                                </div>
-                                <h4 class="text-lg font-bold mb-2 text-darkBlue">AOI检测</h4>
-                                <p class="text-gray-700 text-sm">自动光学检测，识别贴片缺陷、焊锡异常</p>
-                            </div>
-                            <div class="bg-white rounded-xl shadow-tech p-5 flex flex-col items-center text-center hover:shadow-tech-hover transition-all transform hover:-translate-y-1 duration-300">
-                                <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white mb-4">
-                                    <span class="font-bold text-xl">5</span>
-                                </div>
-                                <h4 class="text-lg font-bold mb-2 text-darkBlue">最终测试</h4>
-                                <p class="text-gray-700 text-sm">功能测试、可靠性测试，确保产品性能达标</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="certification" class="py-16 md:py-24 lg:py-32 bg-light">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-                <div class="text-center mb-12 md:mb-16 lg:mb-20">
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 scroll-animate">品质认证</h2>
-                    <div class="w-20 h-1 bg-gradient-tech mx-auto scroll-animate scroll-animate-delay-1"></div>
-                    <p class="mt-6 text-xl text-gray-700 max-w-3xl mx-auto scroll-animate scroll-animate-delay-2">
-                        严格遵循国际质量管理体系标准，通过多项权威认证，确保产品品质稳定可靠
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 scroll-animate">
-                    <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="p-6 md:p-8">
-                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                                <i class="fa fa-certificate text-primary text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-4 text-darkBlue">ISO 9001认证</h3>
-                            <p class="text-gray-700 text-center">
-                                已通过ISO 9001质量管理体系认证，建立了完善的质量管理流程，从原材料采购到成品交付全流程质量可控。
-                            </p>
-                        </div>
-                        <div class="h-4 bg-gradient-tech"></div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="p-6 md:p-8">
-                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                                <i class="fa fa-leaf text-primary text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-4 text-darkBlue">ISO 14001认证</h3>
-                            <p class="text-gray-700 text-center">
-                                已通过ISO 14001环境管理体系认证，注重生产过程中的环境保护，推行清洁生产，减少环境影响。
-                            </p>
-                        </div>
-                        <div class="h-4 bg-gradient-tech"></div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="p-6 md:p-8">
-                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                                <i class="fa fa-lightbulb-o text-primary text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-4 text-darkBlue">高新技术企业</h3>
-                            <p class="text-gray-700 text-center">
-                                2023年获得"高新技术企业"认证（证书编号：GR202312000254），有效期三年，体现公司技术研发实力。
-                            </p>
-                        </div>
-                        <div class="h-4 bg-gradient-tech"></div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="p-6 md:p-8">
-                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                                <i class="fa fa-trophy text-primary text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-4 text-darkBlue">创新型中小企业</h3>
-                            <p class="text-gray-700 text-center">
-                                2023年被认定为"天津市创新型中小企业"，彰显公司在技术创新与产品研发方面的突出表现。
-                            </p>
-                        </div>
-                        <div class="h-4 bg-gradient-tech cp-relative"></div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-tech overflow-hidden hover:shadow-tech-hover transition-all duration-300 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1 md:mx-auto lg:mx-0">
-                        <div class="p-6 md:p-8">
-                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                                <i class="fa fa-star text-primary text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-4 text-darkBlue">优秀服务商</h3>
-                            <p class="text-gray-700 text-center">
-                                2022年度被北京可感可知技术有限公司授予"优秀服务商"称号，体现客户对公司服务品质的高度认可。
-                            </p>
-                        </div>
-                        <div class="h-4 bg-gradient-tech"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="partners" class="py-16 md:py-24 lg:py-32 bg-white">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-                <div class="text-center mb-12 md:mb-16 lg:mb-20">
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 scroll-animate">合作伙伴</h2>
-                    <div class="w-20 h-1 bg-gradient-tech mx-auto scroll-animate scroll-animate-delay-1"></div>
-                    <p class="mt-6 text-xl text-gray-700 max-w-3xl mx-auto scroll-animate scroll-animate-delay-2">
-                        与众多国内外知名企业建立长期稳定合作关系，共同发展，实现共赢
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 scroll-animate">
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-2xl font-bold text-primary">三星</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-2xl font-bold text-primary">现代</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-2xl font-bold text-primary">起亚</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-2xl font-bold text-primary">施耐德</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">钛极智能</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">可感可知</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">京仁电子</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">柯顿医疗</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">九安</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">VELUX</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">秒秒测</span>
-                    </div>
-                    <div class="bg-light rounded-xl p-6 flex items-center justify-center h-32 shadow-sm hover:shadow-tech transition-all">
-                        <span class="text-xl font-bold text-primary">倍至</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 联系我们 -->
-        <section id="contact" class="py-16 md:py-24 lg:py-32 bg-light">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-                <div class="text-center mb-12 md:mb-16 lg:mb-20">
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 scroll-animate">联系我们</h2>
-                    <div class="w-20 h-1 bg-gradient-tech mx-auto scroll-animate scroll-animate-delay-1"></div>
-                    <p class="mt-6 text-xl text-gray-700 max-w-3xl mx-auto scroll-animate scroll-animate-delay-2">
-                        欢迎咨询合作事宜，我们将竭诚为您提供专业服务
-                    </p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
-                    <div class="scroll-animate">
-                        <div class="bg-white rounded-xl shadow-tech p-6 md:p-8 lg:p-10 h-full">
-                            <h3 class="text-2xl md:text-3xl font-bold mb-8 text-darkBlue">联系方式</h3>
-                            
-                            <div class="space-y-6">
-                                <div class="flex items-start">
-                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                                        <i class="fa fa-map-marker text-primary text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-lg font-bold mb-1 text-darkBlue">公司地址</h4>
-                                        <p class="text-gray-700">天津市津南经济开发区东区聚英路中宏道5号</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-start">
-                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                                        <i class="fa fa-phone text-primary text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-lg font-bold mb-1 text-darkBlue">联系电话</h4>
-                                        <p class="text-gray-700">13821613164</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-start">
-                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                                        <i class="fa fa-envelope text-primary text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-lg font-bold mb-1 text-darkBlue">电子邮箱</h4>
-                                        <p class="text-gray-700">contact@zhuoyuandianzi.com</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-start">
-                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                                        <i class="fa fa-clock-o text-primary text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-lg font-bold mb-1 text-darkBlue">工作时间</h4>
-                                        <p class="text-gray-700">周一至周五: 8:30 - 17:30</p>
-                                        <p class="text-gray-700">周六至周日: 休息</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-10">
-                                <h4 class="text-lg font-bold mb-4 text-darkBlue">关注我们</h4>
-                                <div class="flex space-x-4">
-                                    <a href="#" class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary/80 transition-colors">
-                                        <i class="fa fa-weixin"></i>
-                                    </a>
-                                    <a href="#" class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary/80 transition-colors">
-                                        <i class="fa fa-weibo"></i>
-                                    </a>
-                                    <a href="#" class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white hover:bg-primary/80 transition-colors">
-                                        <i class="fa fa-linkedin"></i>
-                                    </a>
-                                </div>
+                        <div class="mt-16">
+                            <h3 class="text-lg font-bold mb-4 text-center zy-text">发展历程</h3>
+                            <div class="flex justify-between items-center text-sm progress-zy">
+                                <span class="text-neutral-muted">2018<span class="ml-2 text-accent">成立</span></span>
+                                <div class="h-0.5 flex-1 mx-2 bg-gradient-to-r from-secondary to-accent"></div>
+                                <span class="text-neutral-muted">2020<span class="ml-2 text-accent">ISO认证</span></span>
+                                <div class="h-0.5 flex-1 mx-2 bg-gradient-to-r from-accent to-primary"></div>
+                                <span class="text-neutral-muted">2023<span class="ml-2 text-accent">高新企业</span></span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="scroll-animate scroll-animate-delay-1">
-                        <div class="bg-white rounded-xl shadow-tech p-6 md:p-8 lg:p-10">
-                            <h3 class="text-2xl md:text-3xl font-bold mb-6 text-darkBlue">咨询合作</h3>
-                            <form>
-                                <div class="grid sm:grid-cols-2 gap-6 mb-6">
-                                    <div>
-                                        <label for="name" class="block text-gray-700 font-medium mb-2">姓名</label>
-                                        <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="请输入您的姓名">
+                    <div class="relative" data-section="hero-image">
+                        <div class="relative z-10 animate-float-slow">
+                            <img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/%E5%9B%BE%E7%89%871.jpg" alt="卓远电子SMT生产车间" class="rounded-2xl shadow-2xl shadow-secondary/20" style="object-fit: cover;width: 100%;">
+                            <div class="absolute -top-6 -left-6 glass-tech p-4 rounded-xl shadow-lg transform rotate-[-3deg] border border-secondary/20">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">
+                                        <i class="fa fa-industry"></i>
                                     </div>
                                     <div>
-                                        <label for="company" class="block text-gray-700 font-medium mb-2">公司名称</label>
-                                        <input type="text" id="company" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="请输入公司名称">
+                                        <p class="text-neutral-muted text-xs">生产设备</p>
+                                        <p class="font-bold text-lg text-neutral-light">松下/三星</p>
                                     </div>
                                 </div>
-                                
-                                <div class="grid sm:grid-cols-2 gap-6 mb-6">
-                                    <div>
-                                        <label for="phone" class="block text-gray-700 font-medium mb-2">联系电话</label>
-                                        <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="请输入联系电话">
+                            </div>
+                            <div class="absolute -bottom-4 -right-4 glass-tech p-4 rounded-xl shadow-lg transform rotate-[3deg] border border-primary/20">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                        <i class="fa fa-certificate"></i>
                                     </div>
                                     <div>
-                                        <label for="email" class="block text-gray-700 font-medium mb-2">电子邮箱</label>
-                                        <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="请输入电子邮箱">
+                                        <p class="text-neutral-muted text-xs">资质认证</p>
+                                        <p class="font-bold text-lg text-neutral-light">ISO9001/14001</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-r from-secondary via-accent to-primary rounded-full filter blur-3xl opacity-30 animate-pulse-tech"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advantages" class="py-24 relative bg-grid-tech overflow-hidden content-section">
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-16" data-section="advantages-header">
+                    <span class="inline-block px-4 py-1.5 glass-tech rounded-full text-accent text-sm font-medium mb-4">
+                        核心优势
+                    </span>
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6">
+                        硬核实力，<span class="text-gradient-accent">铸就品质</span>
+                    </h2>
+                    <p class="text-neutral-muted max-w-2xl mx-auto text-lg">
+                        卓远电子以“品质、服务、效率”为宗旨，凭借高标准生产设备、全流程品质管控及成熟技术体系，为客户提供稳定可靠的PCBA加工解决方案。
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-tech rounded-xl p-8 hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-secondary/30" data-section="advantage-card">
+                        <div class="w-14 h-14 rounded-lg bg-secondary/20 flex items-center justify-center text-secondary text-2xl mb-6">
+                            <i class="fa fa-cogs"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-neutral-light">高标准生产设备</h3>
+                        <p class="text-neutral-muted">
+                            SMT车间采用松下CM602/CM402、三星YSM20/10高速贴片机，可贴BGA、QFN、0201等精密元件；配置PARMI SPI、MIRTEC AOI全线检测设备，确保贴片精度。
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-secondary/10">
+                            <a href="#" class="text-secondary hover:text-accent transition-colors font-medium">
+                                设备详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-tech rounded-xl p-8 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-accent/30" data-section="advantage-card">
+                        <div class="w-14 h-14 rounded-lg bg-accent/20 flex items-center justify-center text-accent text-2xl mb-6">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-neutral-light">全流程品质管控</h3>
+                        <p class="text-neutral-muted">
+                            建立“锡膏搅拌→SPI 3D检测→LCR测定→AOI检测→温箱/烟箱测试→气密性检测”全流程管控体系，搭配MES系统实时追溯，次品率远低于行业标准。
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-accent/10">
+                            <a href="#" class="text-accent hover:text-primary transition-colors font-medium">
+                                管控流程 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-tech rounded-xl p-8 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-primary/30" data-section="advantage-card">
+                        <div class="w-14 h-14 rounded-lg bg-primary/20 flex items-center justify-center text-primary text-2xl mb-6">
+                            <i class="fa fa-handshake-o"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-neutral-light">多领域合作经验</h3>
+                        <p class="text-neutral-muted">
+                            长期服务三星、现代起亚、施耐德、九安等知名企业，涵盖OEM/ODM多种合作模式，可快速响应客户定制需求。
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-primary/10">
+                            <a href="#" class="text-primary hover:text-secondary transition-colors font-medium">
+                                合作案例 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="glass-tech rounded-xl p-8 hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-secondary/30" data-section="advantage-card">
+                        <div class="w-14 h-14 rounded-lg bg-secondary/20 flex items-center justify-center text-secondary text-2xl mb-6">
+                            <i class="fa fa-database"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-neutral-light">成熟MES生产系统</h3>
+                        <p class="text-neutral-muted">
+                            支持在线发布计划、云端进度监控、异常报警推送、智能报表汇总；物料扫码管理杜绝误操作，生产SN绑定批次，质量源头可快速追溯。
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-secondary/10">
+                            <a href="#" class="text-secondary hover:text-accent transition-colors font-medium">
+                                系统功能 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="glass-tech rounded-xl p-8 hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-accent/30" data-section="advantage-card">
+                        <div class="w-14 h-14 rounded-lg bg-accent/20 flex items-center justify-center text-accent text-2xl mb-6">
+                            <i class="fa fa-tachometer"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-neutral-light">高效产能规模</h3>
+                        <p class="text-neutral-muted">
+                            工厂占地2500㎡，配置3条SMT线、1条MI线、4条组立线，SMT日产能190万点，MI焊接能力20万点/日，整机组装能力40K/日，年产各类电子产品500万台。
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-accent/10">
+                            <a href="#" class="text-accent hover:text-primary transition-colors font-medium">
+                                产能详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="glass-tech rounded-xl p-8 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 transform hover:-translate-y-2 border border-transparent hover:border-primary/30" data-section="advantage-card">
+                        <div class="w-14 h-14 rounded-lg bg-primary/20 flex items-center justify-center text-primary text-2xl mb-6">
+                            <i class="fa fa-shield"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-neutral-light">权威资质认证</h3>
+                        <p class="text-neutral-muted">
+                            获ISO9001质量管理体系、ISO14001环境管理体系认证，产品通过3C强制认证，2023年获评“高新技术企业”“天津市创新型中小企业”，技术实力受官方认可。
+                        </p>
+                        <div class="mt-6 pt-6 border-t border-primary/10">
+                            <a href="#" class="text-primary hover:text-secondary transition-colors font-medium">
+                                认证证书 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="py-24 relative bg-primary overflow-hidden content-section">
+            <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-neutral-dark to-primary"></div>
+            <div class="absolute top-1/3 right-0 w-96 h-96 bg-accent/10 rounded-full filter blur-3xl"></div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-16" data-section="products-header">
+                    <span class="inline-block px-4 py-1.5 glass-tech rounded-full text-accent text-sm font-medium mb-4">
+                        产品中心
+                    </span>
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6">
+                        多领域<span class="text-gradient-accent">PCBA解决方案</span>
+                    </h2>
+                    <p class="text-neutral-muted max-w-2xl mx-auto text-lg">
+                        覆盖消费电子、汽车电子、工业电子、物联网、储能、医疗等多个领域，提供从PCB贴片到整机组装的全链条服务，支持OEM/ODM定制。
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-12" data-section="product-tabs">
+                    <button class="product-tab px-6 py-2 rounded-lg bg-accent text-neutral-dark font-medium active-tab">全部产品</button>
+                    <button class="product-tab px-6 py-2 rounded-lg glass-tech hover:bg-accent/20 transition-colors">消费电子</button>
+                    <button class="product-tab px-6 py-2 rounded-lg glass-tech hover:bg-accent/20 transition-colors">汽车电子</button>
+                    <button class="product-tab px-6 py-2 rounded-lg glass-tech hover:bg-accent/20 transition-colors">工业电子</button>
+                    <button class="product-tab px-6 py-2 rounded-lg glass-tech hover:bg-accent/20 transition-colors">物联网</button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-section="product-list">
+                    <div class="group product-card" data-category="消费电子">
+                        <div class="glass-tech rounded-xl overflow-hidden mb-4 relative">
+                            <img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/%E4%B8%89%E6%98%9F%E6%9B%B2%E9%9D%A2.png" alt="三星49寸曲面屏背光板" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                <div class="p-6">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded">OEM</span>
+                                        <span class="px-2 py-1 bg-accent/80 text-white text-xs rounded">消费电子</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-secondary transition-colors">三星49寸曲面屏背光板</h3>
+                        <p class="text-neutral-muted text-sm mb-4">生产规格LED PCB 440*232MM，用于三星曲面电视背光系统，精度达0201元件贴片标准，长期稳定供货。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-neutral-muted">合作客户：三星</span>
+                            <a href="#" class="text-secondary hover:text-accent transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="group product-card" data-category="汽车电子">
+                        <div class="glass-tech rounded-xl overflow-hidden mb-4 relative">
+                            <img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/%E5%A4%A7%E7%81%AF%E8%B0%83%E8%8A%82.png" alt="现代起亚汽车大灯水平调整装置" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                <div class="p-6">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded">OEM</span>
+                                        <span class="px-2 py-1 bg-accent/80 text-white text-xs rounded">汽车电子</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">现代起亚汽车大灯水平调整装置</h3>
+                        <p class="text-neutral-muted text-sm mb-4">用于现代、起亚汽车大灯角度自动调节，具备高温（85℃）、低温（-40℃）环境适应能力，通过汽车行业品质标准。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-neutral-muted">合作客户：现代/起亚</span>
+                            <a href="#" class="text-secondary hover:text-accent transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="group product-card" data-category="工业电子">
+                        <div class="glass-tech rounded-xl overflow-hidden mb-4 relative">
+                            <img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/%E6%BC%8F%E7%94%B5%E4%BF%9D%E6%8A%A4.png" alt="施耐德漏电断路器PCB组件" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                <div class="p-6">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded">OEM</span>
+                                        <span class="px-2 py-1 bg-accent/80 text-white text-xs rounded">工业电子</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">施耐德漏电断路器PCB组件</h3>
+                        <p class="text-neutral-muted text-sm mb-4">为施耐德漏电断路器提供核心PCB贴片及组装服务，绝缘电阻≥100MΩ，漏电动作电流≤30mA，符合工业安全标准。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-neutral-muted">合作客户：施耐德</span>
+                            <a href="#" class="text-secondary hover:text-accent transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="group product-card" data-category="物联网">
+                        <div class="glass-tech rounded-xl overflow-hidden mb-4 relative">
+                            <img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/%E6%B0%B4%E8%A1%A8.png" alt="物联网智能水表PCB组件" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                <div class="p-6">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded">OEM</span>
+                                        <span class="px-2 py-1 bg-accent/80 text-white text-xs rounded">物联网</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-secondary transition-colors">物联网智能水表PCB组件</h3>
+                        <p class="text-neutral-muted text-sm mb-4">支持NB-IoT无线通信，计量精度等级2级，工作温度-10℃~55℃，适配钛极智能等客户的物联网水务系统。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-neutral-muted">合作客户：钛极智能</span>
+                            <a href="#" class="text-secondary hover:text-accent transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="group product-card" data-category="储能">
+                        <div class="glass-tech rounded-xl overflow-hidden mb-4 relative">
+                            <img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/%E5%82%A8%E8%83%BD%E7%94%B5%E7%AB%99%E7%81%AB%E7%81%BE.png" alt="储能热失控探测预警器" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                <div class="p-6">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-secondary/80 text-white text-xs rounded">ODM</span>
+                                        <span class="px-2 py-1 bg-accent/80 text-white text-xs rounded">储能</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">储能热失控探测预警器</h3>
+                        <p class="text-neutral-muted text-sm mb-4">与可感可知合作开发，用于储能电池箱热失控预警，检测温度范围-40℃~125℃，响应时间≤1s，支持多节点组网。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-neutral-muted">合作客户：可感可知</span>
+                            <a href="#" class="text-secondary hover:text-accent transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+        </section>
+
+        <section id="strength" class="py-24 relative bg-grid-tech overflow-hidden content-section">
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-16" data-section="strength-header">
+                    <span class="inline-block px-4 py-1.5 glass-tech rounded-full text-secondary text-sm font-medium mb-4">
+                        企业实力
+                    </span>
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6">
+                        用<span class="text-gradient-accent">数据与资质</span>说话
+                    </h2>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+                    <!-- 数据卡片 1 - 产能 -->
+                    <div class="glass-tech rounded-xl p-6 text-center" data-section="strength-card">
+                        <div class="text-[clamp(2rem,5vw,3rem)] font-display font-bold text-gradient-accent mb-2 counter" data-target="500">0</div>
+                        <p class="text-neutral-muted">年产能力</p>
+                    </div>
+                    
+                    <div class="glass-tech rounded-xl p-6 text-center" data-section="strength-card">
+                        <div class="text-[clamp(2rem,5vw,3rem)] font-display font-bold text-gradient-accent mb-2 counter" data-target="190">0</div>
+                        <p class="text-neutral-muted">SMT日产能</p>
+                    </div>
+                    
+                    <div class="glass-tech rounded-xl p-6 text-center" data-section="strength-card">
+                        <div class="text-[clamp(2rem,5vw,3rem)] font-display font-bold text-gradient-accent mb-2 counter" data-target="8">0</div>
+                        <p class="text-neutral-muted">生产线数量</p>
+                    </div>
+                    
+                    <div class="glass-tech rounded-xl p-6 text-center" data-section="strength-card">
+                        <div class="text-[clamp(2rem,5vw,3rem)] font-display font-bold text-gradient-accent mb-2 counter" data-target="10">0</div>
+                        <p class="text-neutral-muted">核心合作伙伴</p>
+                    </div>
+                </div>
+                
+                <div class="mb-16" data-section="certification">
+                    <h3 class="text-2xl font-bold text-center mb-10">权威资质认证</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="glass-tech rounded-xl p-6 text-center hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-secondary/20 flex items-center justify-center text-secondary text-2xl">
+                                <i class="fa fa-certificate"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2">ISO9001质量管理体系</h4>
+                            <p class="text-neutral-muted text-sm">证书号：17420Q21714R0S<br>有效期至2023.10.18</p>
+                        </div>
+                        
+                        <div class="glass-tech rounded-xl p-6 text-center hover:shadow-lg hover:shadow-accent/10 transition-all duration-300">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-accent/20 flex items-center justify-center text-accent text-2xl">
+                                <i class="fa fa-leaf"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2">ISO14001环境管理体系</h4>
+                            <p class="text-neutral-muted text-sm">证书号：17420E20960R0S<br>有效期至2023.10.18</p>
+                        </div>
+                        
+                        <div class="glass-tech rounded-xl p-6 text-center hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center text-primary text-2xl">
+                                <i class="fa fa-lightbulb-o"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2">高新技术企业</h4>
+                            <p class="text-neutral-muted text-sm">证书号：GR202312000254<br>有效期至2026.11.05</p>
+                        </div>
+                        
+                        <div class="glass-tech rounded-xl p-6 text-center hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-secondary/20 flex items-center justify-center text-secondary text-2xl">
+                                <i class="fa fa-shield"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-2">国家3C强制认证</h4>
+                            <p class="text-neutral-muted text-sm">证书号：2021010201422567<br>有效期至2026.06.25</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div data-section="partners">
+                    <h3 class="text-2xl font-bold text-center mb-10">核心合作伙伴</h3>
+                    <div class="flex flex-wrap justify-center items-center gap-8">
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">三星</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">现代起亚</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">施耐德</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">九安医疗</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">可感可知</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">钛极智能</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">VELUX</span>
+                        </div>
+                        <div class="glass-tech px-6 py-4 rounded-lg hover:shadow-lg hover:shadow-secondary/10 transition-all duration-300">
+                            <span class="text-xl font-bold text-secondary">柯顿医疗</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系区域 -->
+        <section id="contact" class="py-24 relative bg-primary overflow-hidden content-section">
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div data-section="contact-info">
+                        <span class="inline-block px-4 py-1.5 glass-tech rounded-full text-secondary text-sm font-medium mb-4">
+                            联系我们
+                        </span>
+                        <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6">
+                            携手<span class="text-gradient-accent">共赢</span>，共创价值
+                        </h2>
+                        <p class="text-neutral-muted mb-8 text-lg">
+                            无论您有PCBA加工需求、技术咨询或合作意向，卓远电子专业团队将为您提供高效服务，期待与您携手发展。
+                        </p>
+
+                        <!-- 联系信息列表 -->
+                        <div class="space-y-6 mb-8">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mt-1 flex-shrink-0">
+                                    <i class="fa fa-map-marker"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">公司地址</h4>
+                                    <p class="text-neutral-muted">天津市津南经济开发区东区聚英路中宏道5号</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent mt-1 flex-shrink-0">
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">联系电话</h4>
+                                    <p class="text-neutral-muted">总经理：136-6216-9347<br>营业部：138-2161-3164</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mt-1 flex-shrink-0">
+                                    <i class="fa fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">电子邮箱</h4>
+                                    <p class="text-neutral-muted">zhuoyuan1808@163.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mt-1 flex-shrink-0">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">工作时间</h4>
+                                    <p class="text-neutral-muted">周一至周六：8:30-17:30<br>周日：休息</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-tech p-6 rounded-xl">
+                            <h4 class="font-bold mb-4">交通指引</h4>
+                            <ul class="text-neutral-muted space-y-2">
+                                <li>• 距离天津机场约30公里，驾车约40分钟</li>
+                                <li>• 距离塘沽港约40公里，驾车约50分钟</li>
+                                <li>• 附近公交站：聚英路站（津南1路、215路）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div data-section="contact-form">
+                        <div class="glass-tech rounded-xl p-8 border border-secondary/20">
+                            <h3 class="text-2xl font-bold mb-6">咨询合作</h3>
+                            <form id="contactForm">
+                                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                    <div>
+                                        <label for="name" class="block text-neutral-muted mb-2 text-sm">您的姓名</label>
+                                        <input type="text" id="name" class="w-full px-4 py-3 rounded-lg bg-neutral-dark/50 border border-secondary/20 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-300 text-white" placeholder="请输入姓名" required>
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-neutral-muted mb-2 text-sm">联系电话</label>
+                                        <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg bg-neutral-dark/50 border border-secondary/20 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-300 text-white" placeholder="请输入电话" required>
                                     </div>
                                 </div>
                                 
                                 <div class="mb-6">
-                                    <label for="subject" class="block text-gray-700 font-medium mb-2">咨询主题</label>
-                                    <select id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
-                                        <option value="">请选择咨询主题</option>
-                                        <option value="pcba">PCBA加工咨询</option>
-                                        <option value="product">产品采购咨询</option>
-                                        <option value="cooperation">合作洽谈</option>
-                                        <option value="other">其他咨询</option>
+                                    <label for="company" class="block text-neutral-muted mb-2 text-sm">公司名称</label>
+                                    <input type="text" id="company" class="w-full px-4 py-3 rounded-lg bg-neutral-dark/50 border border-secondary/20 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-300 text-white" placeholder="请输入公司名称">
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label for="demand" class="block text-neutral-muted mb-2 text-sm">需求类型</label>
+                                    <select id="demand" class="w-full px-4 py-3 rounded-lg bg-neutral-dark/50 border border-secondary/20 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-300 text-white">
+                                        <option value="">请选择需求类型</option>
+                                        <option value="pcba">PCBA加工需求</option>
+                                        <option value="custom">定制开发需求</option>
+                                        <option value="consult">技术咨询</option>
+                                        <option value="cooperate">战略合作</option>
+                                        <option value="other">其他需求</option>
                                     </select>
                                 </div>
                                 
                                 <div class="mb-6">
-                                    <label for="message" class="block text-gray-700 font-medium mb-2">咨询内容</label>
-                                    <textarea id="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" placeholder="请输入您的咨询内容"></textarea>
+                                    <label for="message" class="block text-neutral-muted mb-2 text-sm">需求描述</label>
+                                    <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg bg-neutral-dark/50 border border-secondary/20 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-300 text-white" placeholder="请简要描述您的需求" required></textarea>
                                 </div>
                                 
-                                <button type="submit" class="w-full bg-gradient-tech text-white font-medium py-3 px-6 rounded-lg hover:opacity-90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300 text-lg">
-                                    提交咨询
+                                <button type="submit" class="w-full bg-gradient-to-r from-secondary via-accent to-primary text-neutral-dark px-6 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:translate-y-[-2px] hover:animate-glow-accent">
+                                    提交需求 <i class="fa fa-paper-plane ml-2"></i>
                                 </button>
                             </form>
                         </div>
@@ -1122,196 +791,334 @@
                 </div>
             </div>
         </section>
+    </main>
 
-        <!-- 页脚 -->
-        <footer class="bg-darkBlue text-white py-12 md:py-16">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-                    <div>
-                        <div class="flex items-center space-x-2 mb-6">
-                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                                <span class="text-primary font-bold text-xl">卓远</span>
-                            </div>
-                            <span class="text-xl font-bold">天津卓远电子</span>
+    <footer class="py-16 relative bg-neutral-dark border-t border-secondary/10">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <a href="#home" class="flex items-center space-x-3 group mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary via-accent to-primary flex items-center justify-center transition-transform duration-300 group-hover:rotate-12 animate-glow-accent">
+                            <span class="font-display font-bold text-xl text-neutral-dark"><img src="http://brsandbox-pro.wikidot.com/local--files/secret:img/logo-removebg-preview.png" style="object-fit: contain;"></span>
                         </div>
-                        <p class="text-gray-300 mb-6">
-                            专注PCBA加工制造的高新技术企业，为您提供高品质电子制造解决方案。
-                        </p>
-                        <div class="flex space-x-4">
-                            <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                                <i class="fa fa-weixin"></i>
-                            </a>
-                            <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                                <i class="fa fa-weibo"></i>
-                            </a>
-                            <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                                <i class="fa fa-linkedin"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-lg font-bold mb-6">快速链接</h4>
-                        <ul class="space-y-3">
-                            <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">企业概况</a></li>
-                            <li><a href="#products" class="text-gray-300 hover:text-white transition-colors">产品中心</a></li>
-                            <li><a href="#production" class="text-gray-300 hover:text-white transition-colors">生产实力</a></li>
-                            <li><a href="#certification" class="text-gray-300 hover:text-white transition-colors">品质认证</a></li>
-                            <li><a href="#partners" class="text-gray-300 hover:text-white transition-colors">合作伙伴</a></li>
-                            <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">联系我们</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-lg font-bold mb-6">产品系列</h4>
-                        <ul class="space-y-3">
-                            <li><a href="#products" class="text-gray-300 hover:text-white transition-colors">消费电子产品</a></li>
-                            <li><a href="#products" class="text-gray-300 hover:text-white transition-colors">汽车电子产品</a></li>
-                            <li><a href="#products" class="text-gray-300 hover:text-white transition-colors">工业电子产品</a></li>
-                            <li><a href="#products" class="text-gray-300 hover:text-white transition-colors">物联网产品</a></li>
-                            <li><a href="#products" class="text-gray-300 hover:text-white transition-colors">储能相关产品</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-lg font-bold mb-6">联系信息</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <i class="fa fa-map-marker text-secondary mt-1 mr-3"></i>
-                                <span class="text-gray-300">天津市津南经济开发区东区聚英路中宏道5号</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fa fa-phone text-secondary mr-3"></i>
-                                <span class="text-gray-300">13821613164</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fa fa-envelope text-secondary mr-3"></i>
-                                <span class="text-gray-300">contact@zhuoyuandianzi.com</span>
-                            </li>
-                        </ul>
+                        <span class="font-display font-bold text-xl">
+                            <span class="text-secondary">天津卓远电子</span><span class="text-accent">有限公司</span>
+                        </span>
+                    </a>
+                    <p class="text-neutral-muted mb-6">
+                        天津卓远电子是专注于PCBA加工制造的高新技术企业，以“卓诚致远 信守不渝”为理念，为全球客户提供优质电子制造服务。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full glass-tech flex items-center justify-center text-secondary hover:text-accent transition-colors">
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full glass-tech flex items-center justify-center text-secondary hover:text-accent transition-colors">
+                            <i class="fa fa-qq"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full glass-tech flex items-center justify-center text-secondary hover:text-accent transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
                     </div>
                 </div>
                 
-                <div class="border-t border-white/10 mt-12 pt-8 text-center text-gray-400">
-                    <p>© 2025 天津卓远电子有限公司 版权所有 | 津ICP备XXXXXXXX号</p>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-neutral-muted hover:text-secondary transition-colors">首页</a></li>
+                        <li><a href="#advantages" class="text-neutral-muted hover:text-secondary transition-colors">核心优势</a></li>
+                        <li><a href="#products" class="text-neutral-muted hover:text-secondary transition-colors">产品中心</a></li>
+                        <li><a href="#strength" class="text-neutral-muted hover:text-secondary transition-colors">企业实力</a></li>
+                        <li><a href="#contact" class="text-neutral-muted hover:text-secondary transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">产品分类</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-muted hover:text-secondary transition-colors">消费电子PCBA</a></li>
+                        <li><a href="#" class="text-neutral-muted hover:text-secondary transition-colors">汽车电子组件</a></li>
+                        <li><a href="#" class="text-neutral-muted hover:text-secondary transition-colors">工业控制PCB</a></li>
+                        <li><a href="#" class="text-neutral-muted hover:text-secondary transition-colors">物联网终端产品</a></li>
+                        <li><a href="#" class="text-neutral-muted hover:text-secondary transition-colors">储能检测设备</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">联系信息</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fa fa-map-marker text-secondary mt-1"></i>
+                            <span class="text-neutral-muted">天津市津南经济开发区东区聚英路中宏道5号</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa fa-phone text-secondary"></i>
+                            <span class="text-neutral-muted">136-6216-9347（总经理）<br>138-2161-3164（营业部）</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa fa-envelope text-secondary"></i>
+                            <span class="text-neutral-muted">zhuoyuan1808@163.com</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </footer>
-
-        <!-- 返回顶部按钮 -->
-        <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary/90 z-50">
-            <i class="fa fa-angle-up text-xl"></i>
-        </button>
-
-
-        <script>
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 100) {
-                    navbar.classList.add('py-2', 'shadow-md');
-                    navbar.classList.remove('py-4', 'shadow-sm');
-                } else {
-                    navbar.classList.add('py-4', 'shadow-sm');
-                    navbar.classList.remove('py-2', 'shadow-md');
-                }
-            });
-
-            const menuBtn = document.getElementById('menuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                const icon = menuBtn.querySelector('i');
-                if (mobileMenu.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
-            });
-
-            const animateElements = document.querySelectorAll('.scroll-animate');
             
-            const checkScroll = () => {
-                animateElements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const elementVisible = 150;
-                    
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        element.classList.add('active');
-                    }
-                });
-            };
-            
-            window.addEventListener('scroll', checkScroll);
-            checkScroll();
+            <div class="border-t border-secondary/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-neutral-muted mb-4 md:mb-0 text-sm">© 2024 天津卓远电子有限公司. 保留所有权利. 津ICP备12345678号</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-neutral-muted hover:text-secondary text-sm transition-colors">隐私政策</a>
+                    <a href="#" class="text-neutral-muted hover:text-secondary text-sm transition-colors">服务条款</a>
+                    <a href="#" class="text-neutral-muted hover:text-secondary text-sm transition-colors">网站地图</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-            const productTabs = document.querySelectorAll('.product-tab');
-            const productItems = document.querySelectorAll('.product-item');
-            
-            productTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    productTabs.forEach(t => {
-                        t.classList.remove('active', 'bg-primary', 'text-white');
-                        t.classList.add('bg-white', 'text-gray-700', 'shadow-sm');
+
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-lg glass-tech text-secondary flex items-center justify-center shadow-lg transform transition-all duration-500 opacity-0 translate-y-10 z-40">
+        <i class="fa fa-chevron-up"></i>
+    </button>
+    <!-- 写JS好累 -->
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                loader.style.transition = 'opacity 1s ease';
+                
+                setTimeout(() => {
+                    document.querySelectorAll('#home [data-section]').forEach((el, index) => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(30px)';
+                        el.style.transition = 'opacity 1.2s ease-out, transform 1.2s ease-out';
+                        
+                        setTimeout(() => {
+                            el.style.opacity = '1';
+                            el.style.transform = 'translateY(0)';
+                        }, index * 150);
                     });
                     
-                    tab.classList.add('active', 'bg-primary', 'text-white');
-                    tab.classList.remove('bg-white', 'text-gray-700', 'shadow-sm');
+                    updateNavIndicator('home');
+                }, 500);
+            }, 2200);
+
+            const productTabs = document.querySelectorAll('.product-tab');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    productTabs.forEach(t => {
+                        t.classList.remove('bg-accent', 'text-neutral-dark');
+                        t.classList.add('glass-tech', 'hover:bg-accent/20');
+                    });
+                    this.classList.remove('glass-tech', 'hover:bg-accent/20');
+                    this.classList.add('bg-accent', 'text-neutral-dark');
                     
-                    const category = tab.getAttribute('data-tab');
-                    
-                    productItems.forEach(item => {
-                        if (category === 'all' || item.getAttribute('data-category') === category) {
-                            item.style.display = 'block';
+                    const category = this.textContent.trim();
+                    productCards.forEach(card => {
+                        if (category === '全部产品' || card.dataset.category === category) {
+                            card.style.                            opacity = '1';
+                            card.style.transform = 'scale(1)';
+                            card.style.display = 'block';
+                            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                         } else {
-                            item.style.display = 'none';
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            card.style.display = 'none';
+                            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                         }
                     });
                 });
             });
 
-            const backToTopBtn = document.getElementById('backToTop');
+            const navbar = document.getElementById('navbar');
+            const backToTop = document.getElementById('back-to-top');
             
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 500) {
-                    backToTopBtn.classList.remove('opacity-0', 'invisible');
-                    backToTopBtn.classList.add('opacity-100', 'visible');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 80) {
+                    navbar.classList.add('glass-tech', 'shadow-lg');
+                    navbar.classList.remove('py-4');
+                    navbar.classList.add('py-3');
+                    
+                    backToTop.classList.remove('opacity-0', 'translate-y-10');
+                    backToTop.classList.add('opacity-100', 'translate-y-0');
                 } else {
-                    backToTopBtn.classList.add('opacity-0', 'invisible');
-                    backToTopBtn.classList.remove('opacity-100', 'visible');
+                    navbar.classList.remove('glass-tech', 'shadow-lg');
+                    navbar.classList.remove('py-3');
+                    navbar.classList.add('py-4');
+                    
+                    backToTop.classList.add('opacity-0', 'translate-y-10');
+                    backToTop.classList.remove('opacity-100', 'translate-y-0');
                 }
             });
-            
-            backToTopBtn.addEventListener('click', () => {
+
+            backToTop.addEventListener('click', function() {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
             });
 
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = menuToggle.querySelector('.menu-icon');
+            
+            menuToggle.addEventListener('click', function() {
+                menuIcon.classList.toggle('open');
+                
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.remove('hidden');
+                    setTimeout(() => {
+                        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                    }, 10);
+                } else {
+                    mobileMenu.style.maxHeight = '0';
+                    mobileMenu.addEventListener('transitionend', function handler() {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.removeEventListener('transitionend', handler);
+                    }, { once: true });
+                }
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link[data-target], .mobile-nav-link');
+            const sections = document.querySelectorAll('.content-section');
+            const pageTransition = document.getElementById('page-transition');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
                     e.preventDefault();
                     
                     if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                        const icon = menuBtn.querySelector('i');
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
+                        mobileMenu.style.maxHeight = '0';
+                        mobileMenu.addEventListener('transitionend', function handler() {
+                            mobileMenu.classList.add('hidden');
+                            menuIcon.classList.remove('open');
+                            mobileMenu.removeEventListener('transitionend', handler);
+                        }, { once: true });
                     }
                     
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
                     
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
+                    if (targetSection.classList.contains('active')) return;
+                    
+                    pageTransition.classList.remove('opacity-0', 'pointer-events-none');
+                    
+                    const currentActive = document.querySelector('.content-section.active');
+                    if (currentActive) {
+                        currentActive.style.opacity = '0';
+                        currentActive.style.transition = 'opacity 0.5s ease';
+                        
+                        setTimeout(() => {
+                            sections.forEach(sec => sec.classList.remove('active'));                    
+                            targetSection.classList.add('active');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            updateNavIndicator(targetId);
+                            setTimeout(() => {
+                                const targetElements = targetSection.querySelectorAll('[data-section]');
+                                targetElements.forEach((el, index) => {
+                                    el.style.opacity = '0';
+                                    el.style.transform = 'translateY(30px)';
+                                    el.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+                                    
+                                    setTimeout(() => {
+                                        el.style.opacity = '1';
+                                        el.style.transform = 'translateY(0)';
+                                        if (targetId === 'strength' && index === targetElements.length - 1) {
+                                            startCounterAnimation();
+                                        }
+                                    }, index * 150);
+                                });
+                                
+                                setTimeout(() => {
+                                    pageTransition.classList.add('opacity-0', 'pointer-events-none');
+                                }, 300);
+                            }, 300);
+                        }, 500);
                     }
                 });
             });
-        </script>
-    </body>
+
+            function updateNavIndicator(targetId) {
+                const activeLink = document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                const indicator = document.querySelector('.nav-indicator');
+                
+                if (activeLink && indicator) {
+                    const linkRect = activeLink.getBoundingClientRect();
+                    const navRect = activeLink.parentElement.getBoundingClientRect();                 
+                    indicator.style.width = `${linkRect.width}px`;
+                    indicator.style.left = `${(linkRect.left - navRect.left) - 32.5}px`;                    
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('text-secondary', 'text-accent', 'active-nav');
+                        link.classList.add('text-neutral-light');
+                    });
+                    activeLink.classList.add('text-secondary', 'active-nav');                    
+                    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                        link.classList.remove('text-secondary', 'active-mobile-nav');
+                        link.classList.add('text-neutral-light');
+                    });
+                    const mobileLink = document.querySelector(`.mobile-nav-link[href="#${targetId}"]`);
+                    if (mobileLink) {
+                        mobileLink.classList.add('text-secondary', 'active-mobile-nav');
+                    }
+                }
+            }
+
+            let counterExecuted = false;
+            function startCounterAnimation() {
+                if (counterExecuted) return;
+                
+                const counters = document.querySelectorAll('.counter');
+                const speed = 200; // 动画速度（越小越快）
+                
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    let count = 0;
+                    
+                    const updateCount = () => {
+                        const increment = target / speed;
+                        if (count < target) {
+                            count += increment;
+                            counter.innerText = Math.ceil(count);
+                            setTimeout(updateCount, 20);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                });
+                
+                counterExecuted = true;
+            }
+
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('name').value;
+                    const phone = document.getElementById('phone').value;
+                    const message = document.getElementById('message').value;
+                    
+                    if (!name || !phone || !message) {
+                        alert('请填写姓名、电话和需求描述！');
+                        return;
+                    }
+                    
+                    const submitBtn = contactForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 提交中...';
+                    
+                    setTimeout(() => {
+                        alert('需求提交成功！我们将在1-2个工作日内与您联系。');
+                        contactForm.reset();
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
 </html>
